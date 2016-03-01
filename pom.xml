@@ -16,4 +16,8 @@
         <module>service</module>
     </modules>
 
+    <properties>
+        <hibernate.version>5.1.0.Final</hibernate.version>
+    </properties>
+
 </project>
