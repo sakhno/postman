@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 /**
@@ -42,9 +44,19 @@ public class HibernateConfig {
             LOGGER.error(e);
         } catch (NullPointerException e) {
             LOGGER.warn("property file not found, trying to connect by getting system variable", e);
-            final JndiDataSourceLookup dsLookup = new JndiDataSourceLookup();
-            dsLookup.setResourceRef(true);
-            return dsLookup.getDataSource("java:/comp/env/jdbc/default");
+            URI dbUri = null;
+            try {
+                dbUri = new URI(System.getenv("DATABASE_URL"));
+            } catch (URISyntaxException e1) {
+                LOGGER.error(e1);
+            }
+            dataSource.setDriverClassName("org.postgresql.Driver");
+            dataSource.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath());
+            dataSource.setUsername(dbUri.getUserInfo().split(":")[0]);
+            dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
+            dataSource.setInitialSize(10);
+            dataSource.setMaxTotal(70);
+            dataSource.setMaxIdle(30);
         }
         return dataSource;
     }
