@@ -56,8 +56,9 @@ public class HibernateConfig {
             dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
             dataSource.setInitialSize(10);
             dataSource.setMaxTotal(70);
-            dataSource.setMaxIdle(30);
+            dataSource.setMaxIdle(15);
         }
+        LOGGER.debug(dataSource);
         return dataSource;
     }
 
