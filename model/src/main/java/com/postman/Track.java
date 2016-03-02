@@ -8,6 +8,8 @@ import java.util.Set;
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
+@Entity
+@Table(name = "tracks")
 public class Track implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +19,8 @@ public class Track implements Serializable {
     @OneToOne
     private User user;
     private boolean active;
-    @Enumerated(EnumType.ORDINAL)
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
     private Set<PostService> services;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
