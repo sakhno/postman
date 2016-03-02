@@ -37,8 +37,8 @@ public class HibernateConfig {
             dataSource.setUrl(prop.getProperty("url"));
             dataSource.setUsername(prop.getProperty("user"));
             dataSource.setPassword(prop.getProperty("password"));
-            dataSource.setInitialSize(20);
-            dataSource.setMaxTotal(60);
+            dataSource.setInitialSize(10);
+            dataSource.setMaxTotal(70);
             dataSource.setMaxIdle(30);
         } catch (IOException e) {
             LOGGER.error(e);
@@ -56,9 +56,8 @@ public class HibernateConfig {
             dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
             dataSource.setInitialSize(10);
             dataSource.setMaxTotal(70);
-            dataSource.setMaxIdle(15);
+            dataSource.setMaxIdle(30);
         }
-        LOGGER.debug(dataSource);
         return dataSource;
     }
 

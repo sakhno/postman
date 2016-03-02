@@ -1,0 +1,18 @@
+.window {
+    min-height: 500px;
+}
+
+.autowindow, .window{
+    margin-top: 20px;
+}
+
+.rightbutton{
+    float: right;
+}
+
+.historytable{
+    font-size: 0.9em;
+}
+.historypanel{
+    min-height: 260px;
+}

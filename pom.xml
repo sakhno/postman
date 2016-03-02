@@ -23,6 +23,7 @@
         <servlet.version>3.1.0</servlet.version>
         <jstl.version>1.2</jstl.version>
         <log4j2.version>2.5</log4j2.version>
+        <springsecurity.version>4.0.4.RELEASE</springsecurity.version>
     </properties>
 
     <build>

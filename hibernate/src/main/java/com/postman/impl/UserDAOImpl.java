@@ -4,10 +4,14 @@ import com.postman.HibernateAbstractDAO;
 import com.postman.PersistenceException;
 import com.postman.User;
 import com.postman.UserDAO;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
+@Repository
 public class UserDAOImpl extends HibernateAbstractDAO<User> implements UserDAO {
     @Override
     public Class getObjectClass() {
@@ -17,5 +21,11 @@ public class UserDAOImpl extends HibernateAbstractDAO<User> implements UserDAO {
     public void delete(long id) throws PersistenceException {
         User user = read(id);
         delete(user);
+    }
+
+    public User getUserByLogin(String login) throws PersistenceException {
+        Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
+                .add(Restrictions.eq("login", login));
+        return (User)criteria.uniqueResult();
     }
 }

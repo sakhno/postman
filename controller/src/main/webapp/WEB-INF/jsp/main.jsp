@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<!--
 <%--
   Created by IntelliJ IDEA.
   User: antonsakhno
@@ -6,11 +8,132 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+-->
 <html>
 <head>
-    <title>Postman - find your parsel</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title><spring:message code="mainpage"/></title>
+    <script src="../../resources/js/bootstrap.min.js" type="text/javascript"></script>
+    <link href="../../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/css/postman.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-    <h1>Main page, It's working :)</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="panel panel-primary window">
+                    <div class="panel-heading">
+                        Find track
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="newtrackform">
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <spring:message code="entertracknumber" var="entertracknumber"/>
+                                    <div class="input-group">
+                                        <span class="input-group-addon glyphicon glyphicon-search"></span>
+                                        <input class="form-control" id="newtrack" placeholder="${entertracknumber}"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input class="btn btn-primary col-xs-10" type="submit" value="<spring:message code="find"/>">
+                                </div>
+                            </div>
+                        </form>
+                        <div class="alert alert-warning" role="alert"><spring:message code="parselnotfound"/> </div>
+                        <div class="alert alert-info" role="alert"><spring:message code="signintoreceiveemail"/></div>
+                    </div>
+                    <table class="table table-striped">
+                        <tr>
+                            <td class="col-sm-2">1.02.2016
+                                02:40:37</td>
+                            <td class="col-sm-10">Прибыло в сортировочный центр Прибыло в сортировочный центр Прибыло в сортировочный центр</td>
+                        </tr>
+                        <tr>
+                            <td>1.02.2016
+                                02:40:37</td>
+                            <td>Обработка в сортировочном центре </td>
+                        </tr>
+                        <tr>
+                            <td>1.02.2016
+                                02:40:37</td>
+                            <td>[Шэньчжэнь] Подготовка к экспорту</td>
+                        </tr>
+                        <tr>
+                            <td class="col-sm-2">1.02.2016
+                                02:40:37</td>
+                            <td class="col-sm-10">Прибыло в сортировочный центр Прибыло в сортировочный центр Прибыло в сортировочный центр</td>
+                        </tr>
+                        <tr>
+                            <td>1.02.2016
+                                02:40:37</td>
+                            <td>Обработка в сортировочном центре </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-primary autowindow">
+                    <div class="panel-heading">
+                        Sign in
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" id="sign in" action="/j_spring_security_check">
+                            <div class="form-group">
+                                <label for="login" class="col-sm-4 control-label"><spring:message code="loginemail"/> </label>
+                                <div class="col-sm-8">
+                                    <input name="j_username" type="email" class="form-control" id="login" placeholder="email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="col-sm-4 control-label"><spring:message code="password"/> </label>
+                                <div class="col-sm-8">
+                                    <input name="j_password" type="password" class="form-control" id="password" placeholder="password">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-default">
+                                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                    </button>
+                                </div>
+                                <div class="col-sm-5">
+                                    <a class="btn btn-primary col-sm-12" href="#"><spring:message code="registration"/></a>
+                                </div>
+                                <div class="col-sm-5 rightbutton">
+                                    <spring:message code="login" var="login"/>
+                                    <input class="btn btn-primary col-sm-12" type="submit" value="${login}">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel panel-primary historypanel">
+                    <div class="panel-heading">
+                        History
+                    </div>
+                    <table class="table table-striped historytable">
+                        <tr>
+                            <td class="col-sm-2">TH894678361CN<br>tablet case</td>
+                            <td class="col-sm-2">1.02.2016 02:40:37</td>
+                            <td class="col-sm-8">Прибыло в сортировочный центр</td>
+                        </tr>
+                        <tr>
+                            <td>RI859392561CN<br>tablet case</td>
+                            <td>25.01.2016 02:40:37</td>
+                            <td>Прибыло в сортировочный центр</td>
+                        </tr>
+                        <tr>
+                            <td>KJ859424261CN<br>tablet case</td>
+                            <td>20.01.2016 02:40:37</td>
+                            <td>Прибыло в сортировочный центр</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
