@@ -16,11 +16,15 @@ public class User implements Serializable {
     private String login;
     private String name;
     private String password;
+    @Transient
+    private String confirmPassword;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Track> tracks;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Message> messages;
     private boolean notifyByEmail;
+    @Enumerated(EnumType.ORDINAL)
+    private Language language;
 
     public long getId() {
         return id;
@@ -82,6 +86,24 @@ public class User implements Serializable {
 
     public User setNotifyByEmail(boolean notifyByEmail) {
         this.notifyByEmail = notifyByEmail;
+        return this;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public User setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+        return this;
+    }
+
+    public Language getLanguage() {
+        return language;
+    }
+
+    public User setLanguage(Language language) {
+        this.language = language;
         return this;
     }
 }

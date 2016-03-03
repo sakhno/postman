@@ -10,6 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 -->
 <html>
 <head>
@@ -33,17 +34,19 @@
                                 <div class="col-xs-8">
                                     <spring:message code="entertracknumber" var="entertracknumber"/>
                                     <div class="input-group">
-                                        <span class="input-group-addon glyphicon glyphicon-search"></span>
-                                        <input class="form-control" id="newtrack" placeholder="${entertracknumber}"/>
+                                        <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
+                                        <input class="form-control input-lg" id="newtrack"placeholder="${entertracknumber}"/>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input class="btn btn-primary col-xs-10" type="submit" value="<spring:message code="find"/>">
+                                    <input class="btn btn-primary col-xs-10 input-lg" type="submit" value="<spring:message code="find"/>">
                                 </div>
                             </div>
                         </form>
                         <div class="alert alert-warning" role="alert"><spring:message code="parselnotfound"/> </div>
-                        <div class="alert alert-info" role="alert"><spring:message code="signintoreceiveemail"/></div>
+                        <sec:authorize access="isAnonymous()">
+                            <div class="alert alert-info" role="alert"><spring:message code="signintoreceiveemail"/></div>
+                        </sec:authorize>
                     </div>
                     <table class="table table-striped">
                         <tr>
@@ -80,39 +83,60 @@
                         Sign in
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" id="sign in" action="/j_spring_security_check">
-                            <div class="form-group">
-                                <label for="login" class="col-sm-4 control-label"><spring:message code="loginemail"/> </label>
-                                <div class="col-sm-8">
-                                    <input name="j_username" type="email" class="form-control" id="login" placeholder="email">
+                        <sec:authorize access="isAnonymous()">
+                            <form class="form-horizontal" id="sign in" action="/j_spring_security_check" method="post">
+                                <div class="form-group">
+                                    <label for="j_username" class="col-sm-4 control-label"><spring:message code="loginemail"/> </label>
+                                    <div class="col-sm-8">
+                                        <input name="j_username" type="text" class="form-control" id="j_username" placeholder="email">
+                                    </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="j_password" class="col-sm-4 control-label"><spring:message code="password"/> </label>
+                                    <div class="col-sm-8">
+                                        <input name="j_password" type="password" class="form-control" id="j_password" placeholder="password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-2">
+                                        <button type="button" class="btn btn-default">
+                                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <a class="btn btn-primary col-sm-12" href="/users/add"><spring:message code="registration"/></a>
+                                    </div>
+                                    <div class="col-sm-5 rightbutton">
+                                        <spring:message code="login" var="login"/>
+                                        <input class="btn btn-primary col-sm-12" type="submit" value="${login}">
+                                    </div>
+                                </div>
+                            </form>
+                        </sec:authorize>
+                        <sec:authorize access="isAuthenticated()">
+
+                        </sec:authorize>
+                        <c:if test="${param.error!=null}">
+                            <div class="alert alert-warning">
+                                ошибка авторизации
+                                ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
                             </div>
-                            <div class="form-group">
-                                <label for="password" class="col-sm-4 control-label"><spring:message code="password"/> </label>
-                                <div class="col-sm-8">
-                                    <input name="j_password" type="password" class="form-control" id="password" placeholder="password">
-                                </div>
+                        </c:if>
+                        <c:if test="${param.logout!=null}">
+                            <div class="alert alert-warning">
+                                You have been logged out.
                             </div>
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <button type="button" class="btn btn-default">
-                                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
-                                    </button>
-                                </div>
-                                <div class="col-sm-5">
-                                    <a class="btn btn-primary col-sm-12" href="#"><spring:message code="registration"/></a>
-                                </div>
-                                <div class="col-sm-5 rightbutton">
-                                    <spring:message code="login" var="login"/>
-                                    <input class="btn btn-primary col-sm-12" type="submit" value="${login}">
-                                </div>
-                            </div>
-                        </form>
+                        </c:if>
                     </div>
                 </div>
                 <div class="panel panel-primary historypanel">
                     <div class="panel-heading">
                         History
+                    </div>
+                    <div class="panel panel-body">
+                        <sec:authorize access="isAnonymous()">
+                            <div class="alert alert-info" role="alert"><spring:message code="signintoviewhistory"/></div>
+                        </sec:authorize>
                     </div>
                     <table class="table table-striped historytable">
                         <tr>

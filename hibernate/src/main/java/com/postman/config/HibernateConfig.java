@@ -43,7 +43,7 @@ public class HibernateConfig {
         } catch (IOException e) {
             LOGGER.error(e);
         } catch (NullPointerException e) {
-            LOGGER.warn("property file not found, trying to connect by getting system variable", e);
+            LOGGER.warn("property file not found, trying to connect by getting system variable");
             URI dbUri = null;
             try {
                 dbUri = new URI(System.getenv("DATABASE_URL"));
