@@ -12,6 +12,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 -->
 <html>
 <head>
@@ -30,7 +31,16 @@
                     <spring:message code="registration"/>
                 </div>
                 <div class="panel-body">
-                    <form:form class="form-horizontal" method="post" action="/users/add" modelAttribute="userForm">
+                    <sec:authorize access="isAuthenticated()">
+                        <c:set var="modelattribute" value="userEditForm" scope="page"/>
+                        <c:set var="model" value="/users/edit" scope="page"/>
+                    </sec:authorize>
+                    <sec:authorize access="isAnonymous()">
+                        <c:set var="modelattribute" value="userForm" scope="page"/>
+                        <c:set var="model" value="/users/add" scope="page"/>
+                    </sec:authorize>
+                    <form:form class="form-horizontal" method="post" action="${model}" modelAttribute="${modelattribute}">
+                        <form:hidden path="id"/>
                         <spring:bind path="login">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
                                 <label for="login" class="control-label col-sm-4"><spring:message code="loginemail"/> </label>
@@ -95,14 +105,12 @@
                         </spring:bind>
                         <div class="form-group">
                             <div class="col-sm-7 col-sm-offset-4">
-                                <c:choose>
-                                    <c:when test="${empty userForm.name}">
-                                        <button type="submit" class="btn btn-primary btn-block"><spring:message code="register"/> </button>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <button type="submit" class="btn btn-primary btn-block"><spring:message code="save"/> </button>
-                                    </c:otherwise>
-                                </c:choose>
+                                <sec:authorize access="isAuthenticated()">
+                                    <button type="submit" class="btn btn-primary btn-block"><spring:message code="save"/> </button>
+                                </sec:authorize>
+                                <sec:authorize access="isAnonymous()">
+                                    <button type="submit" class="btn btn-primary btn-block"><spring:message code="register"/> </button>
+                                </sec:authorize>
                             </div>
                         </div>
                     </form:form>

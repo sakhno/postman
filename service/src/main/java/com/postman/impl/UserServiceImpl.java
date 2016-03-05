@@ -33,6 +33,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public User saveUser(User user) throws PersistenceException{
         if(user.getId()!=0){
+            if(user.getPassword()==null){
+                User oldUser = userDAO.read(user.getId());
+                user.setPassword(oldUser.getPassword());
+            }else {
+                user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));
+            }
             userDAO.update(user);
         }else {
             user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));
@@ -41,11 +47,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
-    public void deleteUser(int id)  throws PersistenceException{
+    public void deleteUser(long id)  throws PersistenceException{
         userDAO.delete(id);
     }
 
-    public User findUserById(int id)  throws PersistenceException{
+    public User findUserById(long id)  throws PersistenceException{
         return userDAO.read(id);
     }
 
@@ -59,7 +65,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        LOGGER.debug("авторизируюсь");
         Set<GrantedAuthority> roles = new HashSet<>();
         User user;
         try {

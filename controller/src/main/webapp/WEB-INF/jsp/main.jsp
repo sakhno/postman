@@ -114,11 +114,16 @@
                             </form>
                         </sec:authorize>
                         <sec:authorize access="isAuthenticated()">
-
+                            <h4 align="center"><spring:message code="hello"/>, ${user.name eq null||user.name eq '' ? user.login : user.name}</h4>
+                            <div class="col-sm-6">
+                                <a class="btn btn-primary col-sm-12" href="/users/edit"><spring:message code="profile"/></a>
+                            </div>
+                            <div class="col-sm-6">
+                                <a class="btn btn-primary col-sm-12" href="/logout"><spring:message code="logout"/></a>
+                            </div>
                         </sec:authorize>
                         <c:if test="${param.error!=null}">
                             <div class="alert alert-warning">
-                                ошибка авторизации
                                 ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
                             </div>
                         </c:if>

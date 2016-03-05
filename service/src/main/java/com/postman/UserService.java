@@ -7,8 +7,8 @@ import java.util.List;
  */
 public interface UserService {
     User saveUser(User user) throws PersistenceException;
-    void deleteUser(int id) throws PersistenceException;
-    User findUserById(int id) throws PersistenceException;
+    void deleteUser(long id) throws PersistenceException;
+    User findUserById(long id) throws PersistenceException;
     List<User> getAllUsers() throws PersistenceException;
     User getUserByLogin(String login) throws PersistenceException;
 }
