@@ -1,6 +1,7 @@
 package com.postman.controllers;
 
 import com.postman.PersistenceException;
+import com.postman.User;
 import com.postman.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,9 +30,11 @@ public class MainPageController {
     @RequestMapping("/home")
     public String mainPage(Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth.isAuthenticated()){
+        if(!"anonymousUser".equals(auth.getName())){
             try {
-                model.addAttribute("user", userService.getUserByLogin(auth.getName()));
+                User user = userService.getUserByLogin(auth.getName());
+                model.addAttribute("user", user);
+//                model.addAttribute("language", user.getLanguage());
             } catch (PersistenceException e) {
                 LOGGER.error(e);
             }

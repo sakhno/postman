@@ -7,7 +7,7 @@
   Time: 22:58
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
@@ -78,7 +78,9 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <div class="panel panel-primary autowindow">
+                <sec:authorize access="isAnonymous()"><c:set var="signinpanel" value="panel-warning"/></sec:authorize>
+                <sec:authorize access="isAuthenticated()"><c:set var="signinpanel" value="panel-success"/> </sec:authorize>
+                <div class="panel ${signinpanel} autowindow">
                     <div class="panel-heading">
                         Sign in
                     </div>

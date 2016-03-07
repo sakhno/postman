@@ -33,12 +33,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public User saveUser(User user) throws PersistenceException{
         if(user.getId()!=0){
-            if(user.getPassword()==null){
-                User oldUser = userDAO.read(user.getId());
-                user.setPassword(oldUser.getPassword());
-            }else {
-                user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));
-            }
             userDAO.update(user);
         }else {
             user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));

@@ -50,7 +50,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public LocaleResolver sessionLocaleResolver(){
         SessionLocaleResolver localeResolver=new SessionLocaleResolver();
         localeResolver.setDefaultLocale(new Locale("en"));
-
         return localeResolver;
     }
 
@@ -65,4 +64,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
     }
+
 }

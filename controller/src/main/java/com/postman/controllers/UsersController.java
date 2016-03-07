@@ -7,6 +7,7 @@ import com.postman.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,8 @@ public class UsersController {
     private static final Logger LOGGER = LogManager.getLogger(UsersController.class);
     @Autowired
     private UserService userService;
+    @Autowired
+    private ShaPasswordEncoder shaPasswordEncoder;
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String registrationPage(Model model){
@@ -56,6 +59,19 @@ public class UsersController {
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String userEditing(@ModelAttribute("userEditForm") @Validated User user,
                               BindingResult bindingResult, Model model){
+        if(user.getPassword()==null||"".equals(user.getPassword())){
+            User oldUser;
+            try {
+                oldUser = userService.findUserById(user.getId());
+            } catch (PersistenceException e) {
+                LOGGER.error(e);
+                bindingResult.rejectValue("login", "dberror");
+                return "userform";
+            }
+            user.setPassword(oldUser.getPassword());
+        }else {
+            user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));
+        }
         return userSaveOrUpdate(user, bindingResult, model);
     }
 
@@ -65,6 +81,7 @@ public class UsersController {
             return "userform";
         }else {
             try {
+                LOGGER.debug(user.getName());
                 userService.saveUser(user);
             } catch (PersistenceException e) {
                 LOGGER.error(e);
