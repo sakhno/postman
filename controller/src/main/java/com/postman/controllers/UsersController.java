@@ -4,6 +4,8 @@ import com.postman.Language;
 import com.postman.PersistenceException;
 import com.postman.User;
 import com.postman.UserService;
+import com.postman.validation.AddUserValidator;
+import com.postman.validation.EditUserValidation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +33,20 @@ public class UsersController {
     private UserService userService;
     @Autowired
     private ShaPasswordEncoder shaPasswordEncoder;
+    @Autowired
+    private AddUserValidator addUserValidator;
+    @Autowired
+    private EditUserValidation editUserValidation;
+
+    @InitBinder("userForm")
+    protected void initUserFormBinder(WebDataBinder binder){
+        binder.setValidator(addUserValidator);
+    }
+
+    @InitBinder("userEditForm")
+    protected void initUserEditFormBinder(WebDataBinder binder){
+        binder.setValidator(editUserValidation);
+    }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String registrationPage(Model model){
@@ -81,7 +99,6 @@ public class UsersController {
             return "userform";
         }else {
             try {
-                LOGGER.debug(user.getName());
                 userService.saveUser(user);
             } catch (PersistenceException e) {
                 LOGGER.error(e);

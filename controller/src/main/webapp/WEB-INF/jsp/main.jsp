@@ -88,7 +88,7 @@
                         <sec:authorize access="isAnonymous()">
                             <form class="form-horizontal" id="sign in" action="/j_spring_security_check" method="post">
                                 <div class="form-group">
-                                    <label for="j_username" class="col-sm-4 control-label"><spring:message code="loginemail"/> </label>
+                                    <label for="j_username" class="col-sm-4 control-label"><spring:message code="email"/> </label>
                                     <div class="col-sm-8">
                                         <input name="j_username" type="text" class="form-control" id="j_username" placeholder="email">
                                     </div>

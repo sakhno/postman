@@ -26,30 +26,50 @@
     <div class="row">
         <div class="col-sm-6">
             <div class="panel panel-primary">
+                <sec:authorize access="isAuthenticated()">
+                    <c:set var="modelattribute" value="userEditForm" scope="page"/>
+                    <c:set var="model" value="/users/edit" scope="page"/>
+                    <c:set var="authorised" value="${true}"/>
+                </sec:authorize>
+                <sec:authorize access="isAnonymous()">
+                    <c:set var="modelattribute" value="userForm" scope="page"/>
+                    <c:set var="model" value="/users/add" scope="page"/>
+                    <c:set var="authorised" value="${false}"/>
+                </sec:authorize>
                 <div class="panel-heading">
-                    <spring:message code="registration"/>
+                    <c:choose>
+                        <c:when test="${authorised}">
+                            <spring:message code="editprofile"/>
+                        </c:when>
+                        <c:otherwise>
+                            <spring:message code="registration"/>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <div class="panel-body">
-                    <sec:authorize access="isAuthenticated()">
-                        <c:set var="modelattribute" value="userEditForm" scope="page"/>
-                        <c:set var="model" value="/users/edit" scope="page"/>
-                    </sec:authorize>
-                    <sec:authorize access="isAnonymous()">
-                        <c:set var="modelattribute" value="userForm" scope="page"/>
-                        <c:set var="model" value="/users/add" scope="page"/>
-                    </sec:authorize>
                     <form:form class="form-horizontal" method="post" action="${model}" modelAttribute="${modelattribute}">
                         <form:hidden path="id"/>
-                        <spring:bind path="login">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                                <label for="login" class="control-label col-sm-4"><spring:message code="loginemail"/> </label>
-                                <div class="col-sm-7">
-                                    <spring:message code="loginemail" var="loginemail"/>
-                                    <form:input path="login" type="text" cssClass="form-control" id="login" placeholder="${loginemail}"/>
-                                    <form:errors path="login" cssClass="control-label"/>
+                        <c:choose>
+                            <c:when test="${not authorised}">
+                                <spring:bind path="login">
+                                    <div class="form-group ${status.error ? 'has-error' : ''}">
+                                        <label for="login" class="control-label col-sm-4"><spring:message code="email"/> </label>
+                                        <div class="col-sm-7">
+                                            <spring:message code="email" var="loginemail"/>
+                                            <form:input path="login" type="text" cssClass="form-control" id="login" placeholder="${loginemail}"/>
+                                            <form:errors path="login" cssClass="control-label"/>
+                                        </div>
+                                    </div>
+                                </spring:bind>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="form-group" align="right">
+                                    <a class="col-sm-11" href="#"><spring:message code="changeemail"/></a>
+                                    <form:hidden path="login"/>
                                 </div>
-                            </div>
-                        </spring:bind>
+                            </c:otherwise>
+                        </c:choose>
+
                         <spring:bind path="name">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
                                 <label for="name" class="control-label col-sm-4"><spring:message code="name"/> </label>
@@ -65,7 +85,7 @@
                                 <label for="password" class="control-label col-sm-4"><spring:message code="password"/> </label>
                                 <div class="col-sm-7">
                                     <spring:message code="password" var="password"/>
-                                    <form:password path="password" cssClass="form-control" id="password" placeholder="${password}"/>
+                                    <form:password path="password" autocomplete="false" cssClass="form-control" id="password" placeholder="${password}"/>
                                     <form:errors path="password" cssClass="control-label"/>
                                 </div>
                             </div>
@@ -75,7 +95,7 @@
                                 <label for="confirmpassword" class="control-label col-sm-4"><spring:message code="confirmpassword"/> </label>
                                 <div class="col-sm-7">
                                     <spring:message code="confirmpassword" var="confirmpassword"/>
-                                    <form:password path="confirmPassword" cssClass="form-control" id="confirmpassword" placeholder="${confirmpassword}"/>
+                                    <form:password path="confirmPassword" autocomplete="false" cssClass="form-control" id="confirmpassword" placeholder="${confirmpassword}"/>
                                     <form:errors path="confirmPassword" cssClass="control-label"/>
                                 </div>
                             </div>
