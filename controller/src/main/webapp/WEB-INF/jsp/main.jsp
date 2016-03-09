@@ -9,6 +9,7 @@
 --%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 -->
@@ -29,13 +30,13 @@
                         Find track
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" id="newtrackform">
+                        <form class="form-horizontal" id="newtrackform" action="/home" method="post">
                             <div class="form-group">
                                 <div class="col-xs-8">
                                     <spring:message code="entertracknumber" var="entertracknumber"/>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
-                                        <input class="form-control input-lg" id="newtrack"placeholder="${entertracknumber}"/>
+                                        <input class="form-control input-lg" name="newtrack" id="newtrack"placeholder="${entertracknumber}"/>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
@@ -43,37 +44,20 @@
                                 </div>
                             </div>
                         </form>
-                        <div class="alert alert-warning" role="alert"><spring:message code="parselnotfound"/> </div>
+                        <c:if test="${param.trackerror!=null}">
+                            <div class="alert alert-warning" role="alert"><spring:message code="parselnotfound"/> </div>
+                        </c:if>
                         <sec:authorize access="isAnonymous()">
                             <div class="alert alert-info" role="alert"><spring:message code="signintoreceiveemail"/></div>
                         </sec:authorize>
                     </div>
                     <table class="table table-striped">
-                        <tr>
-                            <td class="col-sm-2">1.02.2016
-                                02:40:37</td>
-                            <td class="col-sm-10">Прибыло в сортировочный центр Прибыло в сортировочный центр Прибыло в сортировочный центр</td>
-                        </tr>
-                        <tr>
-                            <td>1.02.2016
-                                02:40:37</td>
-                            <td>Обработка в сортировочном центре </td>
-                        </tr>
-                        <tr>
-                            <td>1.02.2016
-                                02:40:37</td>
-                            <td>[Шэньчжэнь] Подготовка к экспорту</td>
-                        </tr>
-                        <tr>
-                            <td class="col-sm-2">1.02.2016
-                                02:40:37</td>
-                            <td class="col-sm-10">Прибыло в сортировочный центр Прибыло в сортировочный центр Прибыло в сортировочный центр</td>
-                        </tr>
-                        <tr>
-                            <td>1.02.2016
-                                02:40:37</td>
-                            <td>Обработка в сортировочном центре </td>
-                        </tr>
+                        <c:forEach var="message" items="${track.messages}">
+                            <tr>
+                                <td class="col-sm-3"><fmt:formatDate value="${message.date}" pattern="dd.MM.yyyy HH:mm"/></td>
+                                <td class="col-sm-9">${message.text}</td>
+                            </tr>
+                        </c:forEach>
                     </table>
                 </div>
             </div>

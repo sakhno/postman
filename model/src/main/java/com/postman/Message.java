@@ -1,5 +1,9 @@
 package com.postman;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,8 +20,6 @@ public class Message implements Serializable {
     private String text;
     @ManyToOne
     private Track track;
-    @ManyToOne
-    private User user;
     private boolean readed;
     private Date date;
 
@@ -43,15 +45,6 @@ public class Message implements Serializable {
         return track;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public Message setUser(User user) {
-        this.user = user;
-        return this;
-    }
-
     public Message setTrack(Track track) {
         this.track = track;
         return this;
@@ -73,5 +66,15 @@ public class Message implements Serializable {
     public Message setDate(Date date) {
         this.date = date;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", readed=" + readed +
+                ", date=" + date +
+                '}';
     }
 }

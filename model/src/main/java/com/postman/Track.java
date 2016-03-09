@@ -1,15 +1,21 @@
 package com.postman;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonRootName;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 @Entity
-@Table(name = "tracks")
+@Table(name = "track")
 public class Track implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +25,14 @@ public class Track implements Serializable {
     @OneToOne
     private User user;
     private boolean active;
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "postservice_id"))
     private Set<PostService> services;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateCreated;
+    @OneToMany
+    private List<Message> messages;
 
     @PrePersist
     private void onCreate(){
@@ -92,5 +100,28 @@ public class Track implements Serializable {
     public Track setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
         return this;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public Track setMessages(List<Message> messages) {
+        this.messages = messages;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "Track{" +
+                "id=" + id +
+                ", number='" + number + '\'' +
+                ", name='" + name + '\'' +
+                ", user=" + user +
+                ", active=" + active +
+                ", services=" + services +
+                ", dateCreated=" + dateCreated +
+                ", messages=" + messages +
+                '}';
     }
 }

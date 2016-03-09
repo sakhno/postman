@@ -21,8 +21,6 @@ public class User implements Serializable {
     private String confirmPassword;
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Track> tracks;
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<Message> messages;
     private boolean notifyByEmail;
     @Enumerated(EnumType.ORDINAL)
     private Language language;
@@ -69,15 +67,6 @@ public class User implements Serializable {
 
     public User setTracks(List<Track> tracks) {
         this.tracks = tracks;
-        return this;
-    }
-
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public User setMessages(List<Message> messages) {
-        this.messages = messages;
         return this;
     }
 
