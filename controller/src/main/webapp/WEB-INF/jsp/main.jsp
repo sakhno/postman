@@ -12,6 +12,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 -->
 <html>
 <head>
@@ -30,20 +31,20 @@
                         Find track
                     </div>
                     <div class="panel-body">
-                        <form class="form-horizontal" id="newtrackform" action="/home" method="post">
+                        <form:form modelAttribute="searchForm" class="form-horizontal" id="newtrackform" action="/home" method="post">
                             <div class="form-group">
                                 <div class="col-xs-8">
                                     <spring:message code="entertracknumber" var="entertracknumber"/>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
-                                        <input class="form-control input-lg" name="newtrack" id="newtrack"placeholder="${entertracknumber}"/>
+                                        <form:input path="trackNumber" class="form-control input-lg" name="newtrack" id="newtrack" placeholder="${entertracknumber}"/>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <input class="btn btn-primary col-xs-10 input-lg" type="submit" value="<spring:message code="find"/>">
                                 </div>
                             </div>
-                        </form>
+                        </form:form>
                         <c:if test="${param.trackerror!=null}">
                             <div class="alert alert-warning" role="alert"><spring:message code="parselnotfound"/> </div>
                         </c:if>
