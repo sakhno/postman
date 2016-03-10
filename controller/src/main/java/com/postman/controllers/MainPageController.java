@@ -20,11 +20,12 @@ import java.util.Map;
 @Controller
 public class MainPageController {
     private static final Logger LOGGER = LogManager.getLogger(MainPageController.class);
-
     @Autowired
     UserService userService;
     @Autowired
     TrackingService trackingService;
+    @Autowired
+    TrackService trackService;
 
     @RequestMapping("/")
     public String index(){
@@ -33,14 +34,15 @@ public class MainPageController {
 
     @RequestMapping("/home")
     public String mainPage(Model model){
-        setUserToModel(model);
+        model.addAttribute("user", getCurrentUser());
         model.addAttribute("searchForm", new SearchForm());
         return "main";
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.POST)
     public String findTrack(Model model, @ModelAttribute("searchForm") @Validated SearchForm searchForm){
-        setUserToModel(model);
+        User user = getCurrentUser();
+        model.addAttribute("user", user);
         String trackNumber = searchForm.getTrackNumber();
         if(trackNumber!=null&&!"".equals(trackNumber)){
             try{
@@ -48,25 +50,31 @@ public class MainPageController {
                 LOGGER.debug(postService);
                 if(trackingService.addSingleTrack(trackNumber, postService)){
                     Track track = trackingService.getSingleTrack(trackNumber);
+                    track.setActive(false);
+                    track = trackService.saveTrack(track);
                     model.addAttribute("track", track);
                     return "main";
                 }
             }catch (TrackNotFoundException e) {
                 return "redirect:/home?trackerror";
+            } catch (PersistenceException e) {
+                LOGGER.error(e);
+                return "main";
             }
         }
         return "redirect:/home?trackerror";
     }
 
-    private void setUserToModel(Model model){
+    private User getCurrentUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = null;
         if(!"anonymousUser".equals(auth.getName())){
             try {
-                User user = userService.getUserByLogin(auth.getName());
-                model.addAttribute("user", user);
+                user = userService.getUserByLogin(auth.getName());
             } catch (PersistenceException e) {
                 LOGGER.error(e);
             }
         }
+        return user;
     }
 }

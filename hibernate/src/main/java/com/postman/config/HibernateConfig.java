@@ -82,7 +82,7 @@ public class HibernateConfig {
         return new Properties(){
             {
                 setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-//                setProperty("show_sql", "true");
+                setProperty("show_sql", "true");
                 setProperty("hibernate.format_sql", "true");
                 setProperty("hibernate.use_sql_comments", "true");
                 setProperty("hibernate.hbm2ddl.auto", "update");

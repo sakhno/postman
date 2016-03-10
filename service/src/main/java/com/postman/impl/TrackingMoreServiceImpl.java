@@ -43,7 +43,7 @@ public class TrackingMoreServiceImpl implements TrackingService {
         String jsonRequest = "{\"tracking_number\":\""+trackCode+"\"}";
         HttpEntity<String> entity = new HttpEntity<>(jsonRequest, getHeaders());
         TMSinglePostService response = restTemplate.postForObject(SERVICE_URL+"/carriers/detect", entity, TMSinglePostService.class );
-        if(response.getMeta().getCode()==4032){
+        if(response.getMeta().getCode()!=200){
             throw new TrackNotFoundException();
         }
         TMCarrier carrier = response.getCarriers()[0];

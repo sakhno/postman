@@ -22,16 +22,16 @@ public class Track implements Serializable {
     private long id;
     private String number;
     private String name;
-    @OneToOne
+    @ManyToOne
     private User user;
     private boolean active;
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "postservice_id"))
     private Set<PostService> services;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateCreated;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "track")
     private List<Message> messages;
 
     @PrePersist

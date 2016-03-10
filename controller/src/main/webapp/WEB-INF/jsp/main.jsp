@@ -21,6 +21,12 @@
     <script src="../../resources/js/bootstrap.min.js" type="text/javascript"></script>
     <link href="../../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="../../resources/css/postman.css" rel="stylesheet" type="text/css"/>
+    <script src="../../resources/js/jquery-2.2.1.min.js" type="text/javascript"></script>
+    <script src="../../resources/js/postman.js" type="text/javascript"></script>
+    <script>
+        var track = ${track.id};
+        var user = ${user.id};
+    </script>
 </head>
 <body>
     <div class="container">
@@ -33,18 +39,32 @@
                     <div class="panel-body">
                         <form:form modelAttribute="searchForm" class="form-horizontal" id="newtrackform" action="/home" method="post">
                             <div class="form-group">
-                                <div class="col-xs-8">
+                                <div class="col-sm-7">
                                     <spring:message code="entertracknumber" var="entertracknumber"/>
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span> </span>
                                         <form:input path="trackNumber" class="form-control input-lg" name="newtrack" id="newtrack" placeholder="${entertracknumber}"/>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <input class="btn btn-primary col-xs-10 input-lg" type="submit" value="<spring:message code="find"/>">
+                                <div class="col-sm-5">
+                                    <sec:authorize access="isAuthenticated()">
+                                        <c:set var="authenticated" value="authenticated"/>
+                                    </sec:authorize>
+                                    <c:choose>
+                                        <c:when test="${searchForm.trackNumber!=null&&authenticated!=null}">
+                                            <input class="btn btn-primary col-sm-5 btn-lg" type="submit" value="<spring:message code="find"/>">
+                                            <a class="btn btn-primary col-sm-6 col-sm-offset-1 btn-lg" role="button"  id="notifybutton" href="#"><spring:message code="notify"/></a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input class="btn btn-primary col-sm-12 btn-lg" type="submit" value="<spring:message code="find"/>">
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </form:form>
+                        <div id="success" class="alert alert-success" role="alert" style="display: none">трек добавлен</div>
+                        <div id="exists" class="alert alert-warning" role="alert" style="display: none">трек уже в базе</div>
+                        <div id="dberror" class="alert alert-danger" role="alert" style="display: none">ошибка работы базы данных</div>
                         <c:if test="${param.trackerror!=null}">
                             <div class="alert alert-warning" role="alert"><spring:message code="parselnotfound"/> </div>
                         </c:if>
