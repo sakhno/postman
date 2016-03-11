@@ -71,6 +71,7 @@ public class MainPageController {
         if(!"anonymousUser".equals(auth.getName())){
             try {
                 user = userService.getUserByLogin(auth.getName());
+                user.setTracks(trackService.getAllUserTracks(user));
             } catch (PersistenceException e) {
                 LOGGER.error(e);
             }

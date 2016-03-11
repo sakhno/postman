@@ -11,4 +11,5 @@ public interface TrackService {
     List<Track> getAllUserTracks(User user) throws PersistenceException;
     boolean checkIfTrackExists(Track track) throws PersistenceException;
     Track findTrackById(long id) throws PersistenceException;
+    List<Track> findAllActiveTracks() throws PersistenceException;
 }

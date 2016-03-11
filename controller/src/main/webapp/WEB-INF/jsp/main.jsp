@@ -29,6 +29,7 @@
     </script>
 </head>
 <body>
+    <c:set var="datepattern" value="dd.MM.yyyy HH:mm"/>
     <div class="container">
         <div class="row">
             <div class="col-sm-8">
@@ -37,6 +38,11 @@
                         Find track
                     </div>
                     <div class="panel-body">
+                        <div class="progress" id="loading" style="display: none">
+                            <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                                <span class="sr-only">40% Complete (success)</span>
+                            </div>
+                        </div>
                         <form:form modelAttribute="searchForm" class="form-horizontal" id="newtrackform" action="/home" method="post">
                             <div class="form-group">
                                 <div class="col-sm-7">
@@ -75,7 +81,7 @@
                     <table class="table table-striped">
                         <c:forEach var="message" items="${track.messages}">
                             <tr>
-                                <td class="col-sm-3"><fmt:formatDate value="${message.date}" pattern="dd.MM.yyyy HH:mm"/></td>
+                                <td class="col-sm-3"><fmt:formatDate value="${message.date}" pattern="${datepattern}"/></td>
                                 <td class="col-sm-9">${message.text}</td>
                             </tr>
                         </c:forEach>
@@ -145,27 +151,22 @@
                     <div class="panel-heading">
                         History
                     </div>
-                    <div class="panel panel-body">
-                        <sec:authorize access="isAnonymous()">
+                    <sec:authorize access="isAnonymous()">
+                        <div class="panel panel-body">
                             <div class="alert alert-info" role="alert"><spring:message code="signintoviewhistory"/></div>
-                        </sec:authorize>
-                    </div>
-                    <table class="table table-striped historytable">
+                        </div>
+                    </sec:authorize>
+                    <table class="table table-striped table-hover historytable" id="historytable">
                         <tr>
-                            <td class="col-sm-2">TH894678361CN<br>tablet case</td>
-                            <td class="col-sm-2">1.02.2016 02:40:37</td>
-                            <td class="col-sm-8">Прибыло в сортировочный центр</td>
+                            <td class="col-sm-4"><spring:message code="added"/> <</td>
+                            <td class="col-sm-8"></td>
                         </tr>
-                        <tr>
-                            <td>RI859392561CN<br>tablet case</td>
-                            <td>25.01.2016 02:40:37</td>
-                            <td>Прибыло в сортировочный центр</td>
-                        </tr>
-                        <tr>
-                            <td>KJ859424261CN<br>tablet case</td>
-                            <td>20.01.2016 02:40:37</td>
-                            <td>Прибыло в сортировочный центр</td>
-                        </tr>
+                        <c:forEach var="track" items="${user.tracks}">
+                            <tr href="#" data-value="${track.number}" style="cursor: pointer">
+                                <td class="col-sm-4"><fmt:formatDate value="${track.dateCreated}" pattern="${datepattern}"/></td>
+                                <td class="col-sm-8">${track.number}<br>${track.name}</td>
+                            </tr>
+                        </c:forEach>
                     </table>
                 </div>
             </div>

@@ -1,15 +1,14 @@
 package com.postman.impl;
 
-import com.postman.HibernateAbstractDAO;
-import com.postman.PersistenceException;
-import com.postman.Track;
-import com.postman.TrackDAO;
+import com.postman.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
@@ -37,5 +36,13 @@ public class TrackDAOImpl extends HibernateAbstractDAO<Track> implements TrackDA
             criteria.add(Restrictions.eq("user", track.getUser()));
         }
         return (Track)criteria.uniqueResult();
+    }
+
+    @Override
+    public List<Track> getAllUserTracks(User user) {
+        Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
+                .add(Restrictions.eq("user", user))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        return criteria.list();
     }
 }

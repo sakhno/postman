@@ -30,7 +30,14 @@ public class TrackServiceImpl implements TrackService {
             trackDAO.update(track);
             return track;
         }else if(checkIfTrackExists(track)){
-            return trackDAO.getTrackByNumberAndUser(track);
+            Track trackInDB = trackDAO.getTrackByNumberAndUser(track);
+            for(Message message:track.getMessages()){
+                if(!trackInDB.getMessages().contains(message)){
+                    trackInDB.getMessages().add(message);
+                }
+            }
+            trackDAO.update(trackInDB);
+            return trackInDB;
         }else {
             return trackDAO.create(track);
         }
@@ -44,7 +51,7 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public List<Track> getAllUserTracks(User user) throws PersistenceException {
-        return null;
+        return trackDAO.getAllUserTracks(user);
     }
 
     @Override
@@ -59,6 +66,11 @@ public class TrackServiceImpl implements TrackService {
     @Override
     public Track findTrackById(long id) throws PersistenceException {
         return trackDAO.read(id);
+    }
+
+    @Override
+    public List<Track> findAllActiveTracks() throws PersistenceException {
+        return null;
     }
 
     private void checkPostServicesInDB(Track track){

@@ -17,3 +17,11 @@ $(document).on("click", "#notifybutton", function(event){
         }
     });
 });
+$(document).on('click', '#historytable > tbody > tr', function() {
+    var track = $(this).data('value');
+    $('#newtrack').val(track);
+    $('#newtrackform').submit();
+});
+$(document).on('submit', '#newtrackform', function(){
+    $('#loading').fadeIn();
+});

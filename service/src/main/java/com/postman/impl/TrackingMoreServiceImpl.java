@@ -20,7 +20,7 @@ import java.util.*;
 public class TrackingMoreServiceImpl implements TrackingService {
     private static final Logger LOGGER = LogManager.getLogger(TrackingMoreServiceImpl.class);
     private static final String SERVICE_URL = "http://api.trackingmore.com/v2";
-    private static final String API_KEY = "012cec67-1edf-4a51-abe7-6bd9c2fae077";
+    private static final String API_KEY = "b324e0b1-e438-4061-8458-1ccf311545bb";
     @Autowired
     private RestTemplate restTemplate;
 
