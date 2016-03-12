@@ -19,7 +19,7 @@ public class User implements Serializable {
     private String password;
     @Transient
     private String confirmPassword;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Track> tracks;
     private boolean notifyByEmail;
     @Enumerated(EnumType.ORDINAL)

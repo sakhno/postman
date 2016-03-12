@@ -156,18 +156,20 @@
                             <div class="alert alert-info" role="alert"><spring:message code="signintoviewhistory"/></div>
                         </div>
                     </sec:authorize>
-                    <table class="table table-striped table-hover historytable" id="historytable">
-                        <tr>
-                            <td class="col-sm-4"><spring:message code="added"/> <</td>
-                            <td class="col-sm-8"></td>
-                        </tr>
-                        <c:forEach var="track" items="${user.tracks}">
-                            <tr href="#" data-value="${track.number}" style="cursor: pointer">
-                                <td class="col-sm-4"><fmt:formatDate value="${track.dateCreated}" pattern="${datepattern}"/></td>
-                                <td class="col-sm-8">${track.number}<br>${track.name}</td>
+                    <sec:authorize access="isAuthenticated()">
+                        <table class="table table-striped table-hover historytable" id="historytable">
+                            <tr>
+                                <th class="col-sm-4"><spring:message code="added"/></th>
+                                <th class="col-sm-8"><spring:message code="trackandname"/></th>
                             </tr>
-                        </c:forEach>
-                    </table>
+                            <c:forEach var="track" items="${user.tracks}">
+                                <tr href="#" data-value="${track.number}" style="cursor: pointer">
+                                    <td class="col-sm-4"><fmt:formatDate value="${track.dateCreated}" pattern="${datepattern}"/></td>
+                                    <td class="col-sm-8">${track.number}<br>${track.name}</td>
+                                </tr>
+                            </c:forEach>
+                        </table>
+                    </sec:authorize>
                 </div>
             </div>
         </div>

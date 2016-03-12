@@ -45,4 +45,12 @@ public class TrackDAOImpl extends HibernateAbstractDAO<Track> implements TrackDA
                 .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         return criteria.list();
     }
+
+    @Override
+    public List<Track> getAllActiveTracks() {
+        Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
+                .add(Restrictions.eq("active", true))
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        return criteria.list();
+    }
 }

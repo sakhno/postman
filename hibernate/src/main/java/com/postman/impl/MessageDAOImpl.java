@@ -1,10 +1,11 @@
 package com.postman.impl;
 
-import com.postman.HibernateAbstractDAO;
-import com.postman.Message;
-import com.postman.MessageDAO;
-import com.postman.PersistenceException;
+import com.postman.*;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
@@ -19,5 +20,17 @@ public class MessageDAOImpl extends HibernateAbstractDAO<Message> implements Mes
     public void delete(long id) throws PersistenceException {
         Message message = read(id);
         delete(message);
+    }
+
+    @Override
+    public List<Message> readAll(String trackNumber, User user) {
+        Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
+                .add(Restrictions.eq("track.number", trackNumber));
+        if(user==null){
+            criteria.add(Restrictions.isNull("track.user"));
+        }else {
+            criteria.add(Restrictions.eq("track.user", user));
+        }
+        return criteria.list();
     }
 }

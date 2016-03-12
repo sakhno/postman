@@ -32,9 +32,7 @@ public class TrackingMoreServiceImpl implements TrackingService {
             throw new TrackNotFoundException();
         }
         Track track = convertToTrack(tmobject.getTrack());
-        Set<PostService> services = new HashSet<>();
-        services.add(postService);
-        track.setServices(services);
+        track.setOriginPostService(postService);
         return track;
     }
 
@@ -77,6 +75,17 @@ public class TrackingMoreServiceImpl implements TrackingService {
     public Track getSingleTrack(String trackCode) throws TrackNotFoundException{
         PostService postService = getPostService(trackCode);
         return getSingleTrack(trackCode, postService);
+    }
+
+    @Override
+    public Map<String, Track> getAllTracks() {
+        HttpEntity<String> entity = new HttpEntity<>(getHeaders());
+        TMMultipleTracks response = restTemplate.exchange(SERVICE_URL+"/trackings/get", HttpMethod.GET, entity, TMMultipleTracks.class ).getBody();
+        Map<String, Track> result = new HashMap();
+        for(TMTrack tmTrack: response.getData().getItems()){
+            result.put(tmTrack.getTrackingNumber(), convertToTrack(tmTrack));
+        }
+        return result;
     }
 
     private HttpHeaders getHeaders(){

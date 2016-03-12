@@ -134,4 +134,41 @@ public class TMTrack implements Serializable {
                 ", destinationInfo=" + destinationInfo +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TMTrack tmTrack = (TMTrack) o;
+
+        if (itemTimeLength != tmTrack.itemTimeLength) return false;
+        if (id != null ? !id.equals(tmTrack.id) : tmTrack.id != null) return false;
+        if (trackingNumber != null ? !trackingNumber.equals(tmTrack.trackingNumber) : tmTrack.trackingNumber != null)
+            return false;
+        if (carrierCode != null ? !carrierCode.equals(tmTrack.carrierCode) : tmTrack.carrierCode != null) return false;
+        if (status != null ? !status.equals(tmTrack.status) : tmTrack.status != null) return false;
+        if (created != null ? !created.equals(tmTrack.created) : tmTrack.created != null) return false;
+        if (updated != null ? !updated.equals(tmTrack.updated) : tmTrack.updated != null) return false;
+        if (originalCountry != null ? !originalCountry.equals(tmTrack.originalCountry) : tmTrack.originalCountry != null)
+            return false;
+        if (originInfo != null ? !originInfo.equals(tmTrack.originInfo) : tmTrack.originInfo != null) return false;
+        return destinationInfo != null ? destinationInfo.equals(tmTrack.destinationInfo) : tmTrack.destinationInfo == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (trackingNumber != null ? trackingNumber.hashCode() : 0);
+        result = 31 * result + (carrierCode != null ? carrierCode.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (created != null ? created.hashCode() : 0);
+        result = 31 * result + (updated != null ? updated.hashCode() : 0);
+        result = 31 * result + (originalCountry != null ? originalCountry.hashCode() : 0);
+        result = 31 * result + itemTimeLength;
+        result = 31 * result + (originInfo != null ? originInfo.hashCode() : 0);
+        result = 31 * result + (destinationInfo != null ? destinationInfo.hashCode() : 0);
+        return result;
+    }
 }

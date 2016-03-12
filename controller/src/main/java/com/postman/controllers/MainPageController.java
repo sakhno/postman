@@ -50,8 +50,11 @@ public class MainPageController {
                 LOGGER.debug(postService);
                 if(trackingService.addSingleTrack(trackNumber, postService)){
                     Track track = trackingService.getSingleTrack(trackNumber);
-                    track.setActive(false);
-                    track = trackService.saveTrack(track);
+                    if(trackService.checkIfTrackExists(track.setUser(user))){
+                        track = trackService.saveTrack(track);
+                    }else {
+                        track = trackService.saveTrack(track.setUser(null));
+                    }
                     model.addAttribute("track", track);
                     return "main";
                 }

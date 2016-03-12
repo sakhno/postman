@@ -1,15 +1,9 @@
 package com.postman;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
@@ -25,9 +19,10 @@ public class Track implements Serializable {
     @ManyToOne
     private User user;
     private boolean active;
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = @JoinColumn(name = "subject_id"), inverseJoinColumns = @JoinColumn(name = "postservice_id"))
-    private Set<PostService> services;
+    @ManyToOne
+    private PostService originPostService;
+    @ManyToOne
+    private PostService destinationPostService;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateCreated;
@@ -66,12 +61,21 @@ public class Track implements Serializable {
         return this;
     }
 
-    public Set<PostService> getServices() {
-        return services;
+    public PostService getOriginPostService() {
+        return originPostService;
     }
 
-    public Track setServices(Set<PostService> services) {
-        this.services = services;
+    public Track setOriginPostService(PostService originPostService) {
+        this.originPostService = originPostService;
+        return this;
+    }
+
+    public PostService getDestinationPostService() {
+        return destinationPostService;
+    }
+
+    public Track setDestinationPostService(PostService destinationPostService) {
+        this.destinationPostService = destinationPostService;
         return this;
     }
 
@@ -119,9 +123,43 @@ public class Track implements Serializable {
                 ", name='" + name + '\'' +
                 ", user=" + user +
                 ", active=" + active +
-                ", services=" + services +
+                ", originPostService=" + originPostService +
+                ", destinationPostService=" + destinationPostService +
                 ", dateCreated=" + dateCreated +
                 ", messages=" + messages +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Track track = (Track) o;
+
+        if (id != track.id) return false;
+        if (active != track.active) return false;
+        if (!number.equals(track.number)) return false;
+        if (name != null ? !name.equals(track.name) : track.name != null) return false;
+        if (user != null ? !user.equals(track.user) : track.user != null) return false;
+        if (originPostService != null ? !originPostService.equals(track.originPostService) : track.originPostService != null)
+            return false;
+        if (destinationPostService != null ? !destinationPostService.equals(track.destinationPostService) : track.destinationPostService != null)
+            return false;
+        return dateCreated.equals(track.dateCreated);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + number.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + (originPostService != null ? originPostService.hashCode() : 0);
+        result = 31 * result + (destinationPostService != null ? destinationPostService.hashCode() : 0);
+        result = 31 * result + dateCreated.hashCode();
+        return result;
     }
 }
