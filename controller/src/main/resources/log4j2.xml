@@ -4,6 +4,8 @@
         <Property name="LOG_DIR">logs</Property>
         <Property name="ARCHIVE">${LOG_DIR}/archive</Property>
         <Property name="PATTERN">[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</Property>
+        <Property name="SENDGRID_USERNAME">${env:SENDGRID_USERNAME}</Property>
+        <Property name="SENDGRID_PASSWORD">${env:SENDGRID_PASSWORD}</Property>
     </Properties>
     <Appenders>
         <Console name="console" target="SYSTEM_OUT">
@@ -19,9 +21,18 @@
             <DefaultRolloverStrategy max="10"/>
             <PatternLayout pattern="${PATTERN}"/>
         </RollingFile>
+        <SMTP name="Mail" subject="Error Log" to="service.postmancom@gmail.com" from="service.postmancom@gmail.com"
+              smtpHost="smtp.sendgrid.net" smtpPort="587" bufferSize="50" smtpUsername="${SENDGRID_USERNAME}"
+              smtpPassword="${SENDGRID_PASSWORD}">
+        </SMTP>
     </Appenders>
     <Loggers>
         <Root level="DEBUG" additivity="false">
+            <AppenderRef ref="fileWriter"/>
+            <AppenderRef ref="console"/>
+        </Root>
+        <Root level="error">
+            <AppenderRef ref="Mail"/>
             <AppenderRef ref="fileWriter"/>
             <AppenderRef ref="console"/>
         </Root>
