@@ -45,24 +45,15 @@ public class MainPageController {
         model.addAttribute("user", user);
         String trackNumber = searchForm.getTrackNumber();
         if(trackNumber!=null&&!"".equals(trackNumber)){
-            try{
-                PostService postService = trackingService.getPostService(trackNumber);
-                LOGGER.debug(postService);
-                if(trackingService.addSingleTrack(trackNumber, postService)){
-                    Track track = trackingService.getSingleTrack(trackNumber);
-                    if(trackService.checkIfTrackExists(track.setUser(user))){
-                        track = trackService.saveTrack(track);
-                    }else {
-                        track = trackService.saveTrack(track.setUser(null));
-                    }
-                    model.addAttribute("track", track);
-                    return "main";
-                }
-            }catch (TrackNotFoundException e) {
-                return "redirect:/home?trackerror";
+            try {
+                Track track = trackService.getTrack(trackNumber, user);
+                model.addAttribute("track", track);
+                return "main";
             } catch (PersistenceException e) {
                 LOGGER.error(e);
                 return "main";
+            } catch (TrackNotFoundException e) {
+                return "redirect:/home?trackerror";
             }
         }
         return "redirect:/home?trackerror";

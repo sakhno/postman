@@ -27,6 +27,8 @@
         <springsecurity.version>4.0.4.RELEASE</springsecurity.version>
         <jackson.version>2.7.2</jackson.version>
         <junit.version>4.12</junit.version>
+        <javamail.version>1.5.5</javamail.version>
+        <aspectj.version>1.8.8</aspectj.version>
     </properties>
 
     <build>

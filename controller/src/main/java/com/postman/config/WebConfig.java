@@ -4,6 +4,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.LocaleResolver;
@@ -24,6 +25,7 @@ import java.util.Locale;
 @Configuration
 @EnableWebMvc
 @EnableScheduling
+@EnableAspectJAutoProxy
 @ComponentScan("com.postman")
 public class WebConfig extends WebMvcConfigurerAdapter {
 

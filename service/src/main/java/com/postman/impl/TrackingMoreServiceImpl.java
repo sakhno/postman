@@ -33,6 +33,7 @@ public class TrackingMoreServiceImpl implements TrackingService {
         }
         Track track = convertToTrack(tmobject.getTrack());
         track.setOriginPostService(postService);
+        LOGGER.debug("Track "+track.getNumber()+" received.");
         return track;
     }
 
@@ -48,7 +49,7 @@ public class TrackingMoreServiceImpl implements TrackingService {
         PostService postService = new PostService();
         postService.setCode(carrier.getCode());
         postService.setName(carrier.getName());
-        LOGGER.debug(postService);
+        LOGGER.debug("PostService "+postService.getName()+" received.");
         return postService;
     }
 
@@ -56,11 +57,12 @@ public class TrackingMoreServiceImpl implements TrackingService {
     public boolean addSingleTrack(String trackCode, PostService postService) throws TrackNotFoundException{
         HttpEntity<String> entity = new HttpEntity<>(getAddTrackBody(trackCode, postService), getHeaders());
         TMCommonRequest result = restTemplate.exchange(SERVICE_URL+"/trackings/post", HttpMethod.POST, entity, TMCommonRequest.class).getBody();
-        LOGGER.debug(result.toString());
         int responseCode = result.getMeta().getCode();
         if(responseCode==200||responseCode==4016){
+            LOGGER.debug("Track "+trackCode+" added to API.");
             return true;
         }else {
+            LOGGER.debug("Failed adding track "+trackCode+" to API.");
             return false;
         }
     }
@@ -101,7 +103,6 @@ public class TrackingMoreServiceImpl implements TrackingService {
                 .append("\"tracking_number\" : \"").append(trackCode).append("\",")
                 .append("\"carrier_code\" : \"").append(postService.getCode()).append('\"')
                 .append('}');
-        LOGGER.debug(result.toString());
         return result.toString();
     }
 

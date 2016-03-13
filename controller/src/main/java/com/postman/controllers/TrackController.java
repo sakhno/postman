@@ -27,8 +27,6 @@ public class TrackController {
         try {
             User user = userService.findUserById(Long.parseLong(parameters.get("user")));
             Track track = trackService.findTrackById(Long.parseLong(parameters.get("track")));
-            LOGGER.debug("user - "+user);
-            LOGGER.debug("Resieved track.id = "+parameters.get("track")+", track - "+track);
             track.setUser(user);
             track.setActive(true);
             if(trackService.checkIfTrackExists(track)){

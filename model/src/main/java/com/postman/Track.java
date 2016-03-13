@@ -27,6 +27,7 @@ public class Track implements Serializable {
     @Column(nullable = false)
     private Date dateCreated;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "track")
+    @OrderBy(value = "date desc")
     private List<Message> messages;
 
     @PrePersist

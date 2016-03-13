@@ -68,9 +68,9 @@
                                 </div>
                             </div>
                         </form:form>
-                        <div id="success" class="alert alert-success" role="alert" style="display: none">трек добавлен</div>
-                        <div id="exists" class="alert alert-warning" role="alert" style="display: none">трек уже в базе</div>
-                        <div id="dberror" class="alert alert-danger" role="alert" style="display: none">ошибка работы базы данных</div>
+                        <div id="success" class="alert alert-success" role="alert" style="display: none"><spring:message code="trackadded"/></div>
+                        <div id="exists" class="alert alert-warning" role="alert" style="display: none"><spring:message code="trackexists"/></div>
+                        <div id="dberror" class="alert alert-danger" role="alert" style="display: none"><spring:message code="dberror"/></div>
                         <c:if test="${param.trackerror!=null}">
                             <div class="alert alert-warning" role="alert"><spring:message code="parselnotfound"/> </div>
                         </c:if>

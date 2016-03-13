@@ -77,11 +77,50 @@ public class TrackServiceImpl implements TrackService {
         for(Track track: activeTracks){
             Track trackFromApi = updatedTracks.get(track.getNumber());
             if(trackFromApi==null){
+                LOGGER.error(track.getNumber()+" not found by update all method.");
                 continue;
             }
             addNewMessages(track, trackFromApi);
             saveTrack(track);
-            LOGGER.debug("Track "+track.getNumber()+" and user "+track.getUser().getLogin()+" updated!");
+            //LOGGER.debug("Track "+track.getNumber()+" and user "+track.getUser().getLogin()+" updated!");
+        }
+    }
+
+    @Override
+    public Track getTrackByNumberAndUser(String trackNumber, User user) throws PersistenceException {//TODO check if needed, refactor
+        Track track = new Track();
+        track.setNumber(trackNumber);
+        track.setUser(user);
+        return trackDAO.getTrackByNumberAndUser(track);
+    }
+
+    @Override
+    public Track getTrack(String trackNumber, User currentUser) throws PersistenceException, TrackNotFoundException {
+        Track track = getTrackByNumberAndUser(trackNumber, currentUser);
+        if(track==null){
+            track = getTrackByNumberAndUser(trackNumber, null);
+        }
+        if (track != null) {
+            Track updatedTrack = trackingService.getSingleTrack(trackNumber, track.getOriginPostService());
+            addNewMessages(track, updatedTrack);
+            saveTrack(track);
+        } else {
+            track = addNewTrackToApi(trackNumber);
+            saveTrack(track);
+        }
+        return track;
+    }
+
+    private Track addNewTrackToApi(String trackNumber) throws PersistenceException, TrackNotFoundException{
+        PostService postService = trackingService.getPostService(trackNumber);
+        postService = findPostServiceInDB(postService);
+        if (trackingService.addSingleTrack(trackNumber, postService)) {
+            Track track = trackingService.getSingleTrack(trackNumber, postService);
+            track = saveTrack(track);
+            return track;
+        }else {
+            LOGGER.error("Unable to add track to API");
+            throw new TrackNotFoundException("Unable to add track to API");
         }
     }
 
@@ -104,12 +143,9 @@ public class TrackServiceImpl implements TrackService {
 
     private void addNewMessages(Track trackInDB, Track trackFromApi)throws PersistenceException{
         List<Message> messages = trackInDB.getMessages();
-        for(Message message: messages){
-            LOGGER.debug(message);
-        }
         for(Message message:trackFromApi.getMessages()){
-            LOGGER.debug(message);
             if(!messages.contains(message)){
+                LOGGER.debug("Message \""+message.getText()+"\" for track "+trackInDB.getNumber()+" added.");
                 message.setTrack(trackInDB);
                 messageDAO.create(message);
                 messages.add(message);
