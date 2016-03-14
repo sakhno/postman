@@ -5,7 +5,7 @@ package com.postman;
  */
 public interface MailService {
 
-    boolean sendMail(String address, String message);
-    boolean sendMail(String address, String message, String from);
+    boolean sendMail(String toAddress, String subject, String message);
+    boolean sendMail(String toAddress, String subject, String message, String fromAddress);
 
 }

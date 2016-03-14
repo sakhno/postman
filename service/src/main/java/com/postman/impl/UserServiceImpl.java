@@ -1,9 +1,6 @@
 package com.postman.impl;
 
-import com.postman.PersistenceException;
-import com.postman.User;
-import com.postman.UserDAO;
-import com.postman.UserService;
+import com.postman.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +13,27 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 @Service
 @Transactional
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
+    private static final String BASE_URL_LOCALHOST = "http://localhost:8080/users/confirmation";
+    private static final String BASE_URL_HEROKU = "http://postmancom.herokuapp.com/users/confirmation";
     @Autowired
     private UserDAO userDAO;
     @Autowired
     private ShaPasswordEncoder shaPasswordEncoder;
+    @Autowired
+    private VerificationTokenDAO verificationTokenDAO;
+    @Autowired
+    private MailService mailService;
 
+    @Override
     public User saveUser(User user) throws PersistenceException{
         if(user.getId()!=0){
             userDAO.update(user);
@@ -42,18 +44,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return user;
     }
 
+    @Override
     public void deleteUser(long id)  throws PersistenceException{
         userDAO.delete(id);
     }
 
+    @Override
     public User findUserById(long id)  throws PersistenceException{
         return userDAO.read(id);
     }
 
+    @Override
     public List<User> getAllUsers()  throws PersistenceException{
         return userDAO.readAll();
     }
 
+    @Override
     public User getUserByLogin(String login)  throws PersistenceException{
         return userDAO.getUserByLogin(login);
     }
@@ -73,5 +79,46 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UsernameNotFoundException("error reading user from DB");
         }
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), roles);
+    }
+
+
+    @Override
+    public void verifyEmail(User user) throws PersistenceException {
+        ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale(user.getLanguage().name()));
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setUser(user);
+        verificationToken.setToken(token);
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.add(Calendar.MINUTE, 15);
+        verificationToken.setDateExpire(calendar.getTime());
+        verificationTokenDAO.create(verificationToken);
+        String subject = messages.getString("mail.registration.subject");
+        String textheader = messages.getString("mail.registration.textheader");
+        String textfooter = messages.getString("mail.registration.textfooter");
+        StringBuilder text = new StringBuilder();
+        text.append(textheader).append("\n\n\n")
+                .append(BASE_URL_HEROKU).append("?token=").append(token)
+                .append("\n\n\n")
+                .append(BASE_URL_LOCALHOST).append("?token=").append(token)
+                .append("\n\n\n\n\n\n").append(textfooter);
+        mailService.sendMail(user.getLogin(), subject, text.toString());
+    }
+
+    @Override
+    public User verifyToken(String token) throws PersistenceException, TokenExpiredException {
+        VerificationToken verificationToken = verificationTokenDAO.getByToken(token);
+        if(verificationToken!=null){
+            verificationTokenDAO.delete(verificationToken.getId());
+            if(verificationToken.getDateExpire().getTime()<new Date().getTime()){
+                throw new TokenExpiredException();
+            }
+            User user = verificationToken.getUser();
+            user.setActive(true);
+            userDAO.update(user);
+            return user;
+        }else {
+            return null;
+        }
     }
 }

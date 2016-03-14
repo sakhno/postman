@@ -25,3 +25,13 @@ $(document).on('click', '#historytable > tbody > tr', function() {
 $(document).on('submit', '#newtrackform', function(){
     $('#loading').fadeIn();
 });
+$(document).on("click", "#confirmemail", function(event){
+    event.preventDefault();
+    $.post("/users/confirmemail", { userid : userid }, function(resposeJson){
+       if(resposeJson){
+           $("#success").fadeIn();
+       } else {
+           $("#dberror").fadeIn();
+       }
+    });
+});

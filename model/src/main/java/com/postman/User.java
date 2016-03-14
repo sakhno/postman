@@ -22,6 +22,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Track> tracks;
     private boolean notifyByEmail;
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    private boolean active;
     @Enumerated(EnumType.ORDINAL)
     private Language language;
 
@@ -94,6 +96,15 @@ public class User implements Serializable {
 
     public User setLanguage(Language language) {
         this.language = language;
+        return this;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public User setActive(boolean active) {
+        this.active = active;
         return this;
     }
 }

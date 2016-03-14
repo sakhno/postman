@@ -20,12 +20,17 @@
     <script src="../../resources/js/bootstrap.min.js" type="text/javascript"></script>
     <link href="../../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="../../resources/css/postman.css" rel="stylesheet" type="text/css"/>
+    <script src="../../resources/js/jquery-2.2.1.min.js" type="text/javascript"></script>
+    <script src="../../resources/js/postman.js" type="text/javascript"></script>
+    <script>
+        var userid = ${userEditForm.id}
+    </script>
 </head>
 <body>
 <div class="container">
     <div class="row">
         <div class="col-sm-6">
-            <div class="panel panel-primary">
+            <div class="panel panel-primary window">
                 <sec:authorize access="isAuthenticated()">
                     <c:set var="modelattribute" value="userEditForm" scope="page"/>
                     <c:set var="model" value="/users/edit" scope="page"/>
@@ -39,7 +44,7 @@
                 <div class="panel-heading">
                     <c:choose>
                         <c:when test="${authorised}">
-                            <spring:message code="editprofile"/>
+                            <spring:message code="editprofile"/>  -  <b>${userEditForm.login}</b>
                         </c:when>
                         <c:otherwise>
                             <spring:message code="registration"/>
@@ -64,12 +69,19 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="form-group" align="right">
-                                    <a class="col-sm-11" href="#"><spring:message code="changeemail"/></a>
+                                    <label for="login" class="control-label col-sm-4"></label>
+                                    <div class="col-sm-4">
+                                        <c:if test="${! userEditForm.active}">
+                                            <a class="btn btn-primary btn-sm col-sm-12" role="button"  href="#" id="confirmemail"><spring:message code="confirmemail"/></a>
+                                        </c:if>
+                                    </div>
+                                    <a class="col-sm-3" href="#"><spring:message code="changeemail"/></a>
                                     <form:hidden path="login"/>
                                 </div>
                             </c:otherwise>
                         </c:choose>
-
+                        <div id="success" class="alert alert-success" role="alert" style="display: none"><spring:message code="checkemail"/></div>
+                        <div id="dberror" class="alert alert-danger" role="alert" style="display: none"><spring:message code="dberror"/></div>
                         <spring:bind path="name">
                             <div class="form-group ${status.error ? 'has-error' : ''}">
                                 <label for="name" class="control-label col-sm-4"><spring:message code="name"/> </label>

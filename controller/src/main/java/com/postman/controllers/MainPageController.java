@@ -34,7 +34,6 @@ public class MainPageController {
 
     @RequestMapping("/home")
     public String mainPage(Model model){
-        LOGGER.error("test error");
         model.addAttribute("user", getCurrentUser());
         model.addAttribute("searchForm", new SearchForm());
         return "main";

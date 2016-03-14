@@ -24,14 +24,13 @@
         <SMTP name="Mail" subject="Error Log" to="service.postmancom@gmail.com" from="service.postmancom@gmail.com"
               smtpHost="smtp.sendgrid.net" smtpPort="587" bufferSize="50" smtpUsername="${SENDGRID_USERNAME}"
               smtpPassword="${SENDGRID_PASSWORD}">
+            <Filters>
+                <ThresholdFilter level="error"  onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
         </SMTP>
     </Appenders>
     <Loggers>
-        <Root level="DEBUG" additivity="false">
-            <AppenderRef ref="fileWriter"/>
-            <AppenderRef ref="console"/>
-        </Root>
-        <Root level="error">
+        <Root level="DEBUG">
             <AppenderRef ref="Mail"/>
             <AppenderRef ref="fileWriter"/>
             <AppenderRef ref="console"/>
