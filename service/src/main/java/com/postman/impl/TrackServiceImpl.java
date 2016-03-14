@@ -6,6 +6,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +27,8 @@ public class TrackServiceImpl implements TrackService {
     TrackingService trackingService;
     @Autowired
     MessageDAO messageDAO;
+    @Autowired
+    MailService mailService;
 
     @Override
     public Track saveTrack(Track track) throws PersistenceException {
@@ -32,7 +37,7 @@ public class TrackServiceImpl implements TrackService {
             trackDAO.update(track);
         }else if(checkIfTrackExists(track)){
             Track trackFromDB = trackDAO.getTrackByNumberAndUser(track);
-            addNewMessages(trackFromDB, track);
+            addNewMessages(trackFromDB, track, null);
             trackDAO.update(trackFromDB);
             return trackFromDB;
         }else {
@@ -72,6 +77,7 @@ public class TrackServiceImpl implements TrackService {
 
     @Override
     public void updateAllActiveTracks() throws PersistenceException {
+        Map<User, List<Message>> notifyUserMap = new HashMap<>();
         Map<String, Track> updatedTracks = trackingService.getAllTracks();
         List<Track> activeTracks = trackDAO.getAllActiveTracks();
         for(Track track: activeTracks){
@@ -80,10 +86,10 @@ public class TrackServiceImpl implements TrackService {
                 LOGGER.error(track.getNumber()+" not found by update all method.");
                 continue;
             }
-            addNewMessages(track, trackFromApi);
+            addNewMessages(track, trackFromApi, notifyUserMap);
             saveTrack(track);
-            //LOGGER.debug("Track "+track.getNumber()+" and user "+track.getUser().getLogin()+" updated!");
         }
+        mailService.notifyStatuses(notifyUserMap);
     }
 
     @Override
@@ -102,7 +108,7 @@ public class TrackServiceImpl implements TrackService {
         }
         if (track != null) {
             Track updatedTrack = trackingService.getSingleTrack(trackNumber, track.getOriginPostService());
-            addNewMessages(track, updatedTrack);
+            addNewMessages(track, updatedTrack, null);
             saveTrack(track);
         } else {
             track = addNewTrackToApi(trackNumber);
@@ -141,15 +147,26 @@ public class TrackServiceImpl implements TrackService {
         }
     }
 
-    private void addNewMessages(Track trackInDB, Track trackFromApi)throws PersistenceException{
+    private void addNewMessages(Track trackInDB, Track trackFromApi, Map<User, List<Message>> notifyUserMap)throws PersistenceException{
         List<Message> messages = trackInDB.getMessages();
         for(Message message:trackFromApi.getMessages()){
             if(!messages.contains(message)){
-                LOGGER.debug("Message \""+message.getText()+"\" for track "+trackInDB.getNumber()+" added.");
                 message.setTrack(trackInDB);
                 messageDAO.create(message);
                 messages.add(message);
+                addMesageToNotifyMap(notifyUserMap, trackInDB.getUser(), message);
             }
         }
     }
+
+    private void addMesageToNotifyMap(Map<User, List<Message>> notifyUserMap, User user, Message message){
+        if(notifyUserMap!=null){
+            if(!notifyUserMap.containsKey(user)){
+                notifyUserMap.put(user, new ArrayList<Message>());
+            }
+            notifyUserMap.get(user).add(message);
+        }
+    }
+
+
 }

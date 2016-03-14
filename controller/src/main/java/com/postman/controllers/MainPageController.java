@@ -23,8 +23,6 @@ public class MainPageController {
     @Autowired
     UserService userService;
     @Autowired
-    TrackingService trackingService;
-    @Autowired
     TrackService trackService;
 
     @RequestMapping("/")
