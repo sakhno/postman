@@ -1,6 +1,14 @@
 /**
  * Created by antonsakhno on 09.03.16.
  */
+$(document).ready(function(){
+    var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
+    $('ul a').each(function() {
+        if (this.href === path) {
+            $(this).parent().addClass('active');
+        }
+    });
+});
 $(document).on("click", "#notifybutton", function(event){
     event.preventDefault();
     $.post("/track", { track : track, user : user}, function(responseJson){

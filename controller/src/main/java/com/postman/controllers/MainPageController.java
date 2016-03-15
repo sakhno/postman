@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -24,6 +25,8 @@ public class MainPageController {
     UserService userService;
     @Autowired
     TrackService trackService;
+    @Autowired
+    MailService mailService;
 
     @RequestMapping("/")
     public String index(){
@@ -31,10 +34,11 @@ public class MainPageController {
     }
 
     @RequestMapping("/home")
-    public String mainPage(Model model){
+    public String homePage(Model model, HttpServletRequest request){
+        notifyMyAboutVisitor(request);
         model.addAttribute("user", getCurrentUser());
         model.addAttribute("searchForm", new SearchForm());
-        return "main";
+        return "home";
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.POST)
@@ -46,10 +50,10 @@ public class MainPageController {
             try {
                 Track track = trackService.getTrack(trackNumber, user);
                 model.addAttribute("track", track);
-                return "main";
+                return "home";
             } catch (PersistenceException e) {
                 LOGGER.error(e);
-                return "main";
+                return "home";
             } catch (TrackNotFoundException e) {
                 return "redirect:/home?trackerror";
             }
@@ -69,5 +73,17 @@ public class MainPageController {
             }
         }
         return user;
+    }
+
+    private void notifyMyAboutVisitor(HttpServletRequest request){
+        String ip = request.getRemoteAddr();
+        LOGGER.debug(ip);
+        if("176.104.50.246".equals(ip)){
+            return;
+        }
+        String server = request.getServerName();
+        String toAddress = "sakhno83@gmail.com";
+        String subject = "your site has been visited";
+        mailService.sendMail(toAddress, subject, "Your site on "+server+" has been visited by "+ip);
     }
 }
