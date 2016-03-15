@@ -76,14 +76,17 @@ public class MainPageController {
     }
 
     private void notifyMyAboutVisitor(HttpServletRequest request){
-        String ip = request.getRemoteAddr();
-        LOGGER.debug(ip);
-        if("176.104.50.246".equals(ip)){
-            return;
-        }
         String server = request.getServerName();
+        String ip = "";
+        try {
+            ip = request.getHeader("X-Forwarded-For").split(",")[0];
+        } catch (Exception ignored){}
+        LOGGER.debug(ip);
         String toAddress = "sakhno83@gmail.com";
         String subject = "your site has been visited";
-        mailService.sendMail(toAddress, subject, "Your site on "+server+" has been visited by "+ip);
+        if("176.104.50.246".equals(ip)||"localhost".equals(server)){
+            return;
+        }
+        mailService.sendMail(toAddress, subject, "Your site "+server+" has been visited by "+ip);
     }
 }
