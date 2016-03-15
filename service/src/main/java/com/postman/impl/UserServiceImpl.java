@@ -99,8 +99,6 @@ public class UserServiceImpl implements UserService {
         StringBuilder text = new StringBuilder();
         text.append(textheader).append("\n\n\n")
                 .append(BASE_URL_HEROKU).append("?token=").append(token)
-                .append("\n\n\n")
-                .append(BASE_URL_LOCALHOST).append("?token=").append(token)
                 .append("\n\n\n\n\n\n").append(textfooter);
         mailService.sendMail(user.getLogin(), subject, text.toString());
     }

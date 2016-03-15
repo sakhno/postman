@@ -86,7 +86,11 @@ public class TrackServiceImpl implements TrackService {
                 LOGGER.error(track.getNumber()+" not found by update all method.");
                 continue;
             }
-            addNewMessages(track, trackFromApi, notifyUserMap);
+            if(track.getUser().isNotifyByEmail()){
+                addNewMessages(track, trackFromApi, notifyUserMap);
+            }else {
+                addNewMessages(track, trackFromApi, null);
+            }
             saveTrack(track);
         }
         mailService.notifyStatuses(notifyUserMap);
@@ -160,7 +164,7 @@ public class TrackServiceImpl implements TrackService {
     }
 
     private void addMesageToNotifyMap(Map<User, List<Message>> notifyUserMap, User user, Message message){
-        if(notifyUserMap!=null){
+        if(notifyUserMap!=null&&user.isActive()&&user.isNotifyByEmail()){
             if(!notifyUserMap.containsKey(user)){
                 notifyUserMap.put(user, new ArrayList<Message>());
             }

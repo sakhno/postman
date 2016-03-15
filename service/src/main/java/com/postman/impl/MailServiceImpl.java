@@ -46,6 +46,7 @@ public class MailServiceImpl implements MailService{
             letters.add(makeNotifyLetter(entry.getKey(), entry.getValue()));
         }
         mailSender.send(letters.toArray(new SimpleMailMessage[letters.size()]));
+        LOGGER.debug(letters.size()+" notify letters sended");
         return true;
     }
 
