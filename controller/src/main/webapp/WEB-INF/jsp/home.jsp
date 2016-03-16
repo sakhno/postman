@@ -35,7 +35,7 @@
             <div class="col-sm-8">
                 <div class="panel panel-primary window">
                     <div class="panel-heading">
-                        Find track
+                        <spring:message code="tracksearch"/>
                     </div>
                     <div class="panel-body">
                         <div class="progress" id="loading" style="display: none">
@@ -93,7 +93,7 @@
                 <sec:authorize access="isAuthenticated()"><c:set var="signinpanel" value="panel-success"/> </sec:authorize>
                 <div class="panel ${signinpanel} autowindow">
                     <div class="panel-heading">
-                        Sign in
+                        <spring:message code="account"/>
                     </div>
                     <div class="panel-body">
                         <sec:authorize access="isAnonymous()">
@@ -111,15 +111,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-2">
-                                        <button type="button" class="btn btn-default">
-                                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>
-                                        </button>
-                                    </div>
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-6">
                                         <a class="btn btn-primary col-sm-12" href="/users/add"><spring:message code="registration"/></a>
                                     </div>
-                                    <div class="col-sm-5 rightbutton">
+                                    <div class="col-sm-6 rightbutton">
                                         <spring:message code="login" var="login"/>
                                         <input class="btn btn-primary col-sm-12" type="submit" value="${login}">
                                     </div>
@@ -142,17 +137,17 @@
                         </c:if>
                         <c:if test="${param.logout!=null}">
                             <div class="alert alert-warning">
-                                You have been logged out.
+                                <spring:message code="logedout"/>
                             </div>
                         </c:if>
                     </div>
                 </div>
-                <div class="panel panel-primary historypanel">
+                <div class="panel panel-primary">
                     <div class="panel-heading">
-                        History
+                        <spring:message code="yourtracks"/>
                     </div>
                     <sec:authorize access="isAnonymous()">
-                        <div class="panel panel-body">
+                        <div class="panel-body">
                             <div class="alert alert-info" role="alert"><spring:message code="signintoviewhistory"/></div>
                         </div>
                     </sec:authorize>
@@ -169,6 +164,12 @@
                                 </tr>
                             </c:forEach>
                         </table>
+                        <div class="panel-body">
+                            <c:if test="${user.tracks.isEmpty()}">
+                                <div class="alert alert-info" role="alert"><spring:message code="notracksadded"/></div>
+                            </c:if>
+                            <a class="btn btn-primary col-sm-7 col-sm-offset-5" href="#"><spring:message code="managetracks"/></a>
+                        </div>
                     </sec:authorize>
                 </div>
             </div>

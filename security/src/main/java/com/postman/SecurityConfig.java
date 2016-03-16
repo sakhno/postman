@@ -47,12 +47,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/users/add", "/home", "/users/confirmation").permitAll()
+                .antMatchers("/resources/**", "/users/add", "/home", "/", "/users/confirmation").permitAll()
                 .antMatchers("/**").authenticated();
         http.formLogin()
-                .loginPage("/home")
+                .loginPage("/signin")
                 .loginProcessingUrl("/j_spring_security_check")
-                .failureUrl("/home?error")
+                .failureUrl("/signin?error")
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
                 .successHandler(authenticationSuccessHandler)

@@ -33,7 +33,7 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav">
                     <li><a href="/home">Home</a></li>
-                    <li><a href="/track"><spring:message code="mytracks"/></a></li>
+                    <li><a href="#"><spring:message code="mytracks"/></a></li>
                     <li><a href="/users/edit"><spring:message code="profile"/></a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
