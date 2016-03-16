@@ -17,11 +17,6 @@ public class MessageDAOImpl extends HibernateAbstractDAO<Message> implements Mes
         return Message.class;
     }
 
-    public void delete(long id) throws PersistenceException {
-        Message message = read(id);
-        delete(message);
-    }
-
     @Override
     public List<Message> readAll(String trackNumber, User user) {
         Criteria criteria = getCurrentSession().createCriteria(getObjectClass())

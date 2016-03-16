@@ -22,11 +22,6 @@ public class TrackDAOImpl extends HibernateAbstractDAO<Track> implements TrackDA
         return Track.class;
     }
 
-    public void delete(long id) throws PersistenceException {
-        Track track = read(id);
-        delete(track);
-    }
-
     public Track getTrackByNumberAndUser(Track track) {
         Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
                 .add(Restrictions.eq("number", track.getNumber()));

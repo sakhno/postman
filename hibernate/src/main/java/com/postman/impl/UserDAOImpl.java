@@ -18,11 +18,6 @@ public class UserDAOImpl extends HibernateAbstractDAO<User> implements UserDAO {
         return User.class;
     }
 
-    public void delete(long id) throws PersistenceException {
-        User user = read(id);
-        delete(user);
-    }
-
     public User getUserByLogin(String login) throws PersistenceException {
         Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
                 .add(Restrictions.eq("login", login));

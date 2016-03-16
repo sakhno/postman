@@ -23,10 +23,4 @@ public class VerificationTokenDAOImpl extends HibernateAbstractDAO<VerificationT
                 .setParameter("token", token);
         return (VerificationToken)query.uniqueResult();
     }
-
-    @Override
-    public void delete(long id) throws PersistenceException {
-        VerificationToken verificationToken = read(id);
-        delete(verificationToken);
-    }
 }

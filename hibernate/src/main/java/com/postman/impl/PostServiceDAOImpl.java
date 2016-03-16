@@ -17,11 +17,6 @@ public class PostServiceDAOImpl extends HibernateAbstractDAO<PostService> implem
         return PostService.class;
     }
 
-    public void delete(long id) throws PersistenceException {
-        PostService postService = read(id);
-        delete(postService);
-    }
-
     public PostService getPostServiceByCode(String code) {
         Query query = getCurrentSession().createQuery("from PostService where code=:code")
                 .setParameter("code", code);
