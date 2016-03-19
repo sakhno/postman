@@ -35,7 +35,7 @@
             <div class="col-sm-8">
                 <div class="panel panel-primary window">
                     <div class="panel-heading">
-                        <spring:message code="tracksearch"/>
+                        <h4 class="panel-title"><spring:message code="tracksearch"/></h4>
                     </div>
                     <div class="panel-body">
                         <div class="progress" id="loading" style="display: none">
@@ -93,7 +93,7 @@
                 <sec:authorize access="isAuthenticated()"><c:set var="signinpanel" value="panel-success"/> </sec:authorize>
                 <div class="panel ${signinpanel} autowindow">
                     <div class="panel-heading">
-                        <spring:message code="account"/>
+                        <h4 class="panel-title"><spring:message code="account"/></h4>
                     </div>
                     <div class="panel-body">
                         <sec:authorize access="isAnonymous()">
@@ -144,7 +144,7 @@
                 </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <spring:message code="yourtracks"/>
+                        <h4 class="panel-title"><spring:message code="yourtracks"/></h4>
                     </div>
                     <sec:authorize access="isAnonymous()">
                         <div class="panel-body">
@@ -168,7 +168,7 @@
                             <c:if test="${user.tracks.isEmpty()}">
                                 <div class="alert alert-info" role="alert"><spring:message code="notracksadded"/></div>
                             </c:if>
-                            <a class="btn btn-primary col-sm-7 col-sm-offset-5" href="#"><spring:message code="managetracks"/></a>
+                            <a class="btn btn-primary col-sm-7 col-sm-offset-5" href="/commingsoon"><spring:message code="managetracks"/></a>
                         </div>
                     </sec:authorize>
                 </div>

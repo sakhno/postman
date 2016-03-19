@@ -61,6 +61,11 @@ public class MainPageController {
         return "redirect:/home?trackerror";
     }
 
+    @RequestMapping(value = "/commingsoon")
+    public String commingSoon(){
+        return "commingsoon";
+    }
+
     private User getCurrentUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = null;
@@ -81,7 +86,6 @@ public class MainPageController {
         try {
             ip = request.getHeader("X-Forwarded-For").split(",")[0];
         } catch (Exception ignored){}
-        LOGGER.debug(ip);
         String toAddress = "sakhno83@gmail.com";
         String subject = "your site has been visited";
         if("176.104.50.246".equals(ip)||"localhost".equals(server)){

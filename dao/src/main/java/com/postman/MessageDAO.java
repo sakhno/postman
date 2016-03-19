@@ -7,4 +7,6 @@ import java.util.List;
  */
 public interface MessageDAO extends GenericDAO<Message> {
     List<Message> readAll(String trackNumber, User user);
+    int getNumberOfUnreadMessages(User user);
+    int getNumberOfUnreadMessages(Track track);
 }

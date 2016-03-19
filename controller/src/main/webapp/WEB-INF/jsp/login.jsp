@@ -16,7 +16,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title><spring:message code="auth"/></title>
+    <title>Postman - <spring:message code="auth"/></title>
     <script src="../../resources/js/bootstrap.min.js" type="text/javascript"></script>
     <link href="../../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="../../resources/css/postman.css" rel="stylesheet" type="text/css"/>

@@ -15,4 +15,6 @@ public interface TrackService {
     void updateAllActiveTracks() throws PersistenceException;
     Track getTrackByNumberAndUser(String trackNumber, User user) throws PersistenceException;
     Track getTrack(String trackNumber, User currentUser) throws PersistenceException, TrackNotFoundException;
+    int getNumberOfUnreadMessages(User user) throws PersistenceException;
+    int getNumberOfUnreadMessages(Track track) throws PersistenceException;
 }

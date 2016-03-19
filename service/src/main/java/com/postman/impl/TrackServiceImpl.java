@@ -172,5 +172,13 @@ public class TrackServiceImpl implements TrackService {
         }
     }
 
+    @Override
+    public int getNumberOfUnreadMessages(User user) throws PersistenceException {
+        return messageDAO.getNumberOfUnreadMessages(user);
+    }
 
+    @Override
+    public int getNumberOfUnreadMessages(Track track) throws PersistenceException {
+        return messageDAO.getNumberOfUnreadMessages(track);
+    }
 }

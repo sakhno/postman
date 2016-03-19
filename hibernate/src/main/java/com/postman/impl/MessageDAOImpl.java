@@ -2,6 +2,7 @@ package com.postman.impl;
 
 import com.postman.*;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -27,5 +28,20 @@ public class MessageDAOImpl extends HibernateAbstractDAO<Message> implements Mes
             criteria.add(Restrictions.eq("track.user", user));
         }
         return criteria.list();
+    }
+
+    @Override
+    public int getNumberOfUnreadMessages(User user) {
+        Query query = getCurrentSession().createQuery("from Message where track.user=:user and readed = false");
+        query.setParameter("user", user);
+        return query.list().size();
+    }
+
+    @Override
+    public int getNumberOfUnreadMessages(Track track) {
+        Query query = getCurrentSession().createQuery("from Message where track=:track and readed = false");
+        query.setParameter("track", track);
+        System.out.println(query.list());
+        return query.list().size();
     }
 }

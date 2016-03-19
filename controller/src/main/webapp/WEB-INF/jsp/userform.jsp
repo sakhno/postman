@@ -15,7 +15,12 @@
 -->
 <html>
 <head>
-    <title><spring:message code="registration"/></title>
+    <sec:authorize access="isAuthenticated()">
+        <title>Postman - <spring:message code="editprofile"/></title>
+    </sec:authorize>
+    <sec:authorize access="isAnonymous()">
+        <title>Postman - <spring:message code="registration"/></title>
+    </sec:authorize>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="../../resources/js/bootstrap.min.js" type="text/javascript"></script>
     <link href="../../resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>

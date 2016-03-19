@@ -1,9 +1,5 @@
 package com.postman;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
