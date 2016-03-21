@@ -77,6 +77,9 @@
                         <sec:authorize access="isAnonymous()">
                             <div class="alert alert-info" role="alert"><spring:message code="signintoreceiveemail"/></div>
                         </sec:authorize>
+                        <c:if test="${track.messages!=null and track.messages.isEmpty()}">
+                            <div class="alert alert-info" role="alert"><spring:message code="emptymessage"/></div>
+                        </c:if>
                     </div>
                     <table class="table table-striped">
                         <c:forEach var="message" items="${track.messages}">
