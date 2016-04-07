@@ -22,6 +22,7 @@
     <link href="../../resources/css/postman.css" rel="stylesheet" type="text/css"/>
     <script src="../../resources/js/jquery-2.2.1.min.js" type="text/javascript"></script>
     <script src="../../resources/js/postman.js" type="text/javascript"></script>
+    <script src="../../com.postman.gwt.Postmangwt/com.postman.gwt.Postmangwt.nocache.js" type="text/javascript" language="javascript"></script>
     <jsp:include page="/WEB-INF/jsp/menu.jsp" />
 </head>
 <body>

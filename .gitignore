@@ -1,3 +1,5 @@
 /service/logs
 /hibernate/src/main/resources/postgresql_config.properties
 # Created by .ignore support plugin (hsz.mobi)
+/bin/
+/pom.xml

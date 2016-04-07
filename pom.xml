@@ -30,6 +30,7 @@
         <javamail.version>1.5.5</javamail.version>
         <aspectj.version>1.8.8</aspectj.version>
         <mockito.version>1.10.19</mockito.version>
+        <gwt.version>2.7.0</gwt.version>
     </properties>
 
     <build>
@@ -72,6 +73,19 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
