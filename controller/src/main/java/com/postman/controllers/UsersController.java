@@ -1,6 +1,10 @@
 package com.postman.controllers;
 
-import com.postman.*;
+import com.postman.PersistenceException;
+import com.postman.TokenExpiredException;
+import com.postman.UserService;
+import com.postman.model.Language;
+import com.postman.model.User;
 import com.postman.validation.AddUserValidator;
 import com.postman.validation.EditUserValidation;
 import org.apache.logging.log4j.LogManager;
@@ -42,24 +46,24 @@ public class UsersController {
     protected AuthenticationManager authenticationManager;
 
     @InitBinder("userForm")
-    protected void initUserFormBinder(WebDataBinder binder){
+    protected void initUserFormBinder(WebDataBinder binder) {
         binder.setValidator(addUserValidator);
     }
 
     @InitBinder("userEditForm")
-    protected void initUserEditFormBinder(WebDataBinder binder){
+    protected void initUserEditFormBinder(WebDataBinder binder) {
         binder.setValidator(editUserValidation);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String registrationPage(Model model){
+    public String registrationPage(Model model) {
         model.addAttribute("languages", Language.values());
         model.addAttribute("userForm", new User().setNotifyByEmail(true));
         return "userform";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editPage(Model model){
+    public String editPage(Model model) {
         model.addAttribute("languages", Language.values());
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         try {
@@ -72,11 +76,11 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String userRegistration(@ModelAttribute("userForm") @Validated User user, BindingResult bindingResult, Model model){
+    public String userRegistration(@ModelAttribute("userForm") @Validated User user, BindingResult bindingResult, Model model) {
         model.addAttribute("languages", Language.values());
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "userform";
-        }else {
+        } else {
             try {
                 user = userService.saveUser(user);
                 userService.verifyEmail(user);
@@ -91,8 +95,8 @@ public class UsersController {
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String userEditing(@ModelAttribute("userEditForm") @Validated User user,
-                              BindingResult bindingResult, Model model){
-        if(user.getPassword()==null||"".equals(user.getPassword())){
+                              BindingResult bindingResult, Model model) {
+        if (user.getPassword() == null || "".equals(user.getPassword())) {
             User oldUser;
             try {
                 oldUser = userService.findUserById(user.getId());
@@ -102,20 +106,20 @@ public class UsersController {
                 return "userform";
             }
             user.setPassword(oldUser.getPassword());
-        }else {
+        } else {
             user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));
         }
         return userSaveOrUpdate(user, bindingResult, model);
     }
 
     @RequestMapping(value = "/confirmation", method = RequestMethod.GET)
-    public String emailConfirmation(Model model, @RequestParam("token") String token, HttpServletRequest request){
+    public String emailConfirmation(Model model, @RequestParam("token") String token, HttpServletRequest request) {
         try {
             User user = userService.verifyToken(token);
-            if(user!=null){
+            if (user != null) {
                 authenticateUserAndSetSession(user, request);
                 model.addAttribute("message", "emailconfirmationsuccessful");
-            }else {
+            } else {
                 model.addAttribute("message", "confirmationerror");
             }
         } catch (PersistenceException e) {
@@ -129,7 +133,7 @@ public class UsersController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/confirmemail")
     @ResponseBody
-    public boolean confirmemail(@RequestParam Map<String, String> parameters){
+    public boolean confirmemail(@RequestParam Map<String, String> parameters) {
         long id = Long.parseLong(parameters.get("userid"));
         try {
             User user = userService.findUserById(id);
@@ -141,11 +145,11 @@ public class UsersController {
         }
     }
 
-    private String userSaveOrUpdate(User user, BindingResult bindingResult, Model model){
+    private String userSaveOrUpdate(User user, BindingResult bindingResult, Model model) {
         model.addAttribute("languages", Language.values());
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "userform";
-        }else {
+        } else {
             try {
                 userService.saveUser(user);
             } catch (PersistenceException e) {

@@ -14,7 +14,7 @@
 <html>
 <head>
     <title>Postman - coming soon :)</title>
-    <jsp:include page="/WEB-INF/jsp/menu.jsp" />
+    <jsp:include page="/WEB-INF/jsp/menu.jsp"/>
 </head>
 <body>
 <div class="container">

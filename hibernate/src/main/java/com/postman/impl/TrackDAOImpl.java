@@ -1,10 +1,12 @@
 package com.postman.impl;
 
-import com.postman.*;
+import com.postman.HibernateAbstractDAO;
+import com.postman.TrackDAO;
+import com.postman.model.Track;
+import com.postman.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -25,12 +27,12 @@ public class TrackDAOImpl extends HibernateAbstractDAO<Track> implements TrackDA
     public Track getTrackByNumberAndUser(Track track) {
         Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
                 .add(Restrictions.eq("number", track.getNumber()));
-        if(track.getUser()==null){
+        if (track.getUser() == null) {
             criteria.add(Restrictions.isNull("user"));
-        }else {
+        } else {
             criteria.add(Restrictions.eq("user", track.getUser()));
         }
-        return (Track)criteria.uniqueResult();
+        return (Track) criteria.uniqueResult();
     }
 
     @Override

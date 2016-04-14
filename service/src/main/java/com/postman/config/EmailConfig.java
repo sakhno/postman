@@ -13,10 +13,10 @@ public class EmailConfig {
     private static final String SMTP_HOST_NAME = "smtp.sendgrid.net";
     private static final int SMTP_PORT = 587;
     private static final String SMTP_AUTH_USER = System.getenv("SENDGRID_USERNAME");
-    private static final String SMTP_AUTH_PWD  = System.getenv("SENDGRID_PASSWORD");
+    private static final String SMTP_AUTH_PWD = System.getenv("SENDGRID_PASSWORD");
 
     @Bean
-    public JavaMailSender mailSender(){
+    public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(SMTP_HOST_NAME);
         mailSender.setPort(SMTP_PORT);

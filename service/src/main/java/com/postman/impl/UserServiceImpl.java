@@ -1,6 +1,8 @@
 package com.postman.impl;
 
 import com.postman.*;
+import com.postman.model.User;
+import com.postman.model.VerificationToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,6 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,10 +35,10 @@ public class UserServiceImpl implements UserService {
     private MailService mailService;
 
     @Override
-    public User saveUser(User user) throws PersistenceException{
-        if(user.getId()!=0){
+    public User saveUser(User user) throws PersistenceException {
+        if (user.getId() != 0) {
             userDAO.update(user);
-        }else {
+        } else {
             user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));
             user = userDAO.create(user);
         }
@@ -45,22 +46,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(long id)  throws PersistenceException{
+    public void deleteUser(long id) throws PersistenceException {
         userDAO.delete(id);
     }
 
     @Override
-    public User findUserById(long id)  throws PersistenceException{
+    public User findUserById(long id) throws PersistenceException {
         return userDAO.read(id);
     }
 
     @Override
-    public List<User> getAllUsers()  throws PersistenceException{
+    public List<User> getAllUsers() throws PersistenceException {
         return userDAO.readAll();
     }
 
     @Override
-    public User getUserByLogin(String login)  throws PersistenceException{
+    public User getUserByLogin(String login) throws PersistenceException {
         return userDAO.getUserByLogin(login);
     }
 
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
         User user;
         try {
             user = getUserByLogin(login);
-            if(user==null){
+            if (user == null) {
                 throw new UsernameNotFoundException("user not found");
             }
         } catch (PersistenceException e) {
@@ -106,16 +107,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User verifyToken(String token) throws PersistenceException, TokenExpiredException {
         VerificationToken verificationToken = verificationTokenDAO.getByToken(token);
-        if(verificationToken!=null){
+        if (verificationToken != null) {
             verificationTokenDAO.delete(verificationToken.getId());
-            if(verificationToken.getDateExpire().getTime()<new Date().getTime()){
+            if (verificationToken.getDateExpire().getTime() < new Date().getTime()) {
                 throw new TokenExpiredException();
             }
             User user = verificationToken.getUser();
             user.setActive(true);
             userDAO.update(user);
             return user;
-        }else {
+        } else {
             return null;
         }
     }

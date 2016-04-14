@@ -1,6 +1,9 @@
 package com.postman;
 
 import com.postman.config.TestConfig;
+import com.postman.model.Message;
+import com.postman.model.Track;
+import com.postman.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -31,18 +34,18 @@ public class TrackServiceTest {
     private UserService userService;
 
     @Before
-    public void setUp()throws PersistenceException{
+    public void setUp() throws PersistenceException {
         user = userService.saveUser(new User());
         track = new Track();
         track.setUser(user);
         track.setDateCreated(new Date());
         List<Message> messages = new ArrayList<>();
         boolean flag;
-        for(int n=1; n<6; n++){
-            if(n%2==0){
+        for (int n = 1; n < 6; n++) {
+            if (n % 2 == 0) {
                 flag = true;
-            }else {
-                flag =false;
+            } else {
+                flag = false;
             }
             messages.add(new Message().setReaded(flag).setTrack(track));
         }
@@ -51,7 +54,7 @@ public class TrackServiceTest {
     }
 
     @Test
-    public void getNumberTest()throws PersistenceException, TrackNotFoundException{
+    public void getNumberTest() throws PersistenceException, TrackNotFoundException {
         LOGGER.debug(trackService.getNumberOfUnreadMessages(user));
         LOGGER.debug(trackService.getNumberOfUnreadMessages(track));
         Assert.assertEquals(3, trackService.getNumberOfUnreadMessages(track));

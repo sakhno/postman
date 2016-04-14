@@ -1,4 +1,4 @@
-package com.postman;
+package com.postman.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "postservice")
-public class PostService implements Serializable{
+public class PostService implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

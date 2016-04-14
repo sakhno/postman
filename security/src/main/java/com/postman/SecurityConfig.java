@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,7 +19,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
  */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final Logger LOGGER = LogManager.getLogger(SecurityConfig.class);
     @Autowired
     private UserDetailsService userDetailsService;
@@ -28,7 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
     AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
-    public ShaPasswordEncoder shaPasswordEncoder(){
+    public ShaPasswordEncoder shaPasswordEncoder() {
         return new ShaPasswordEncoder();
     }
 
@@ -37,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         auth.userDetailsService(userDetailsService).passwordEncoder(shaPasswordEncoder());
     }
 
-    @Bean(name="myAuthenticationManager")
+    @Bean(name = "myAuthenticationManager")
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();

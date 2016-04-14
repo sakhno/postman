@@ -1,4 +1,4 @@
-package com.postman;
+package com.postman.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -31,7 +31,7 @@ public class Track implements Serializable {
     private List<Message> messages;
 
     @PrePersist
-    private void onCreate(){
+    private void onCreate() {
         dateCreated = new Date();
     }
 

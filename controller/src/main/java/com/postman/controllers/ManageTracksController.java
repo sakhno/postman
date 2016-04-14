@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ManageTracksController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String manageTracks(){
+    public String manageTracks() {
         return "tracks";
     }
 }

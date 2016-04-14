@@ -7,7 +7,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -28,7 +27,7 @@ public class HibernateConfig {
     private static final String PROPERTY_FILE_NAME = "postgresql_config.properties";
 
     @Bean
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         try {
             Properties prop = new Properties();
@@ -62,7 +61,7 @@ public class HibernateConfig {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory(){
+    public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
         localSessionFactoryBean.setDataSource(dataSource());
         localSessionFactoryBean.setPackagesToScan("com.postman");
@@ -78,8 +77,8 @@ public class HibernateConfig {
         return txManager;
     }
 
-    Properties hibernateProperties(){
-        return new Properties(){
+    Properties hibernateProperties() {
+        return new Properties() {
             {
                 setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
                 setProperty("show_sql", "true");

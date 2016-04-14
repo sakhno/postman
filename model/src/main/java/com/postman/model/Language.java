@@ -1,4 +1,4 @@
-package com.postman;
+package com.postman.model;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
@@ -8,7 +8,7 @@ public enum Language {
 
     @Override
     public String toString() {
-        switch (this){
+        switch (this) {
             case EN:
                 return "English";
             case RU:

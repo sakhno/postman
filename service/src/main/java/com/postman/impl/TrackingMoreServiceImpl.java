@@ -1,6 +1,9 @@
 package com.postman.impl;
 
 import com.postman.*;
+import com.postman.model.Message;
+import com.postman.model.PostService;
+import com.postman.model.Track;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,56 +28,56 @@ public class TrackingMoreServiceImpl implements TrackingService {
     private RestTemplate restTemplate;
 
     @Override
-    public Track getSingleTrack(String trackingNumber, PostService postService) throws TrackNotFoundException{
+    public Track getSingleTrack(String trackingNumber, PostService postService) throws TrackNotFoundException {
         HttpEntity<String> entity = new HttpEntity<>(getHeaders());
-        TMSingleTrack tmobject = restTemplate.exchange(SERVICE_URL+"/trackings/"+postService.getCode()+"/"+trackingNumber, HttpMethod.GET, entity, TMSingleTrack.class).getBody();
-        if(tmobject.getMeta().getCode()==4031){
+        TMSingleTrack tmobject = restTemplate.exchange(SERVICE_URL + "/trackings/" + postService.getCode() + "/" + trackingNumber, HttpMethod.GET, entity, TMSingleTrack.class).getBody();
+        if (tmobject.getMeta().getCode() == 4031) {
             throw new TrackNotFoundException();
         }
         Track track = convertToTrack(tmobject.getTrack());
         track.setOriginPostService(postService);
-        LOGGER.debug("Track "+track.getNumber()+" received.");
+        LOGGER.debug("Track " + track.getNumber() + " received.");
         return track;
     }
 
     @Override
-    public PostService getPostService(String trackCode) throws TrackNotFoundException{
-        String jsonRequest = "{\"tracking_number\":\""+trackCode+"\"}";
+    public PostService getPostService(String trackCode) throws TrackNotFoundException {
+        String jsonRequest = "{\"tracking_number\":\"" + trackCode + "\"}";
         HttpEntity<String> entity = new HttpEntity<>(jsonRequest, getHeaders());
-        TMSinglePostService response = restTemplate.postForObject(SERVICE_URL+"/carriers/detect", entity, TMSinglePostService.class );
-        if(response.getMeta().getCode()!=200){
+        TMSinglePostService response = restTemplate.postForObject(SERVICE_URL + "/carriers/detect", entity, TMSinglePostService.class);
+        if (response.getMeta().getCode() != 200) {
             throw new TrackNotFoundException();
         }
         TMCarrier carrier = response.getCarriers()[0];
         PostService postService = new PostService();
         postService.setCode(carrier.getCode());
         postService.setName(carrier.getName());
-        LOGGER.debug("PostService "+postService.getName()+" received.");
+        LOGGER.debug("PostService " + postService.getName() + " received.");
         return postService;
     }
 
     @Override
-    public boolean addSingleTrack(String trackCode, PostService postService) throws TrackNotFoundException{
+    public boolean addSingleTrack(String trackCode, PostService postService) throws TrackNotFoundException {
         HttpEntity<String> entity = new HttpEntity<>(getAddTrackBody(trackCode, postService), getHeaders());
-        TMCommonRequest result = restTemplate.exchange(SERVICE_URL+"/trackings/post", HttpMethod.POST, entity, TMCommonRequest.class).getBody();
+        TMCommonRequest result = restTemplate.exchange(SERVICE_URL + "/trackings/post", HttpMethod.POST, entity, TMCommonRequest.class).getBody();
         int responseCode = result.getMeta().getCode();
-        if(responseCode==200||responseCode==4016){
-            LOGGER.debug("Track "+trackCode+" added to API.");
+        if (responseCode == 200 || responseCode == 4016) {
+            LOGGER.debug("Track " + trackCode + " added to API.");
             return true;
-        }else {
-            LOGGER.debug("Failed adding track "+trackCode+" to API.");
+        } else {
+            LOGGER.debug("Failed adding track " + trackCode + " to API.");
             return false;
         }
     }
 
     @Override
-    public boolean addSingleTrack(String trackCode) throws TrackNotFoundException{
+    public boolean addSingleTrack(String trackCode) throws TrackNotFoundException {
         PostService postService = getPostService(trackCode);
         return addSingleTrack(trackCode, postService);
     }
 
     @Override
-    public Track getSingleTrack(String trackCode) throws TrackNotFoundException{
+    public Track getSingleTrack(String trackCode) throws TrackNotFoundException {
         PostService postService = getPostService(trackCode);
         return getSingleTrack(trackCode, postService);
     }
@@ -82,22 +85,22 @@ public class TrackingMoreServiceImpl implements TrackingService {
     @Override
     public Map<String, Track> getAllTracks() {
         HttpEntity<String> entity = new HttpEntity<>(getHeaders());
-        TMMultipleTracks response = restTemplate.exchange(SERVICE_URL+"/trackings/get", HttpMethod.GET, entity, TMMultipleTracks.class ).getBody();
+        TMMultipleTracks response = restTemplate.exchange(SERVICE_URL + "/trackings/get", HttpMethod.GET, entity, TMMultipleTracks.class).getBody();
         Map<String, Track> result = new HashMap();
-        for(TMTrack tmTrack: response.getData().getItems()){
+        for (TMTrack tmTrack : response.getData().getItems()) {
             result.put(tmTrack.getTrackingNumber(), convertToTrack(tmTrack));
         }
         return result;
     }
 
-    private HttpHeaders getHeaders(){
+    private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.add("Trackingmore-Api-Key", API_KEY);
         return headers;
     }
 
-    private String getAddTrackBody(String trackCode, PostService postService){
+    private String getAddTrackBody(String trackCode, PostService postService) {
         StringBuilder result = new StringBuilder();
         result.append('{')
                 .append("\"tracking_number\" : \"").append(trackCode).append("\",")
@@ -106,15 +109,15 @@ public class TrackingMoreServiceImpl implements TrackingService {
         return result.toString();
     }
 
-    private Track convertToTrack(TMTrack tmTrack){
+    private Track convertToTrack(TMTrack tmTrack) {
         Track track = new Track();
         track.setDateCreated(tmTrack.getCreated());
         TMMessage[] originalMessages = null;
         TMMessage[] destinationMessages = null;
-        if(tmTrack.getOriginInfo()!=null){
+        if (tmTrack.getOriginInfo() != null) {
             originalMessages = tmTrack.getOriginInfo().getTrackinfo();
         }
-        if(tmTrack.getDestinationInfo()!=null){
+        if (tmTrack.getDestinationInfo() != null) {
             destinationMessages = tmTrack.getDestinationInfo().getTrackinfo();
         }
         track.setMessages(convertToMessage(originalMessages, destinationMessages, track));
@@ -122,7 +125,7 @@ public class TrackingMoreServiceImpl implements TrackingService {
         return track;
     }
 
-    private List<Message> convertToMessage(TMMessage[] originalMessages, TMMessage[] destinationMessages, Track track){
+    private List<Message> convertToMessage(TMMessage[] originalMessages, TMMessage[] destinationMessages, Track track) {
         List<Message> messages = new ArrayList<>();
         addMessagesToList(originalMessages, messages, track);
         addMessagesToList(destinationMessages, messages, track);
@@ -135,12 +138,14 @@ public class TrackingMoreServiceImpl implements TrackingService {
         return messages;
     }
 
-    private void addMessagesToList(TMMessage[] apiMessages, List<Message> messages, Track track){
-        if(apiMessages==null){return;}
-        for(TMMessage tmMessage: apiMessages){
+    private void addMessagesToList(TMMessage[] apiMessages, List<Message> messages, Track track) {
+        if (apiMessages == null) {
+            return;
+        }
+        for (TMMessage tmMessage : apiMessages) {
             Message message = new Message();
             message.setDate(tmMessage.getDate());
-            message.setText(tmMessage.getStatusDescription()+", "+tmMessage.getDetails());
+            message.setText(tmMessage.getStatusDescription() + ", " + tmMessage.getDetails());
             message.setTrack(track);
             messages.add(message);
         }

@@ -17,12 +17,12 @@ public class LoggingAspect {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Around("execution(* com.postman.TrackingService.*(..))")
-    public Object timeElapsed(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+    public Object timeElapsed(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object result = proceedingJoinPoint.proceed();
         stopWatch.stop();
-        LOGGER.debug("Time elapsed - "+stopWatch.getTotalTimeSeconds());
+        LOGGER.debug("Time elapsed - " + stopWatch.getTotalTimeSeconds());
         return result;
     }
 }

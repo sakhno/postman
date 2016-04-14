@@ -1,6 +1,9 @@
 package com.postman;
 
 import com.postman.config.TestConfig;
+import com.postman.model.Message;
+import com.postman.model.PostService;
+import com.postman.model.Track;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -26,13 +29,13 @@ public class TrackingServiceTest {
     private TrackingService trackingService;
 
     @Test
-    public void getTrackInfoTest()throws IOException, TrackNotFoundException{
+    public void getTrackInfoTest() throws IOException, TrackNotFoundException {
         PostService postService = trackingService.getPostService(TEST_TRACK2);
         trackingService.addSingleTrack(TEST_TRACK2, postService);
         Track track = trackingService.getSingleTrack(TEST_TRACK2, postService);
         Assert.assertNotNull(track.getNumber());
-        if(track!=null&&track.getMessages()!=null){
-            for (Message message: track.getMessages()){
+        if (track != null && track.getMessages() != null) {
+            for (Message message : track.getMessages()) {
                 LOGGER.debug(message.getText());
             }
         }

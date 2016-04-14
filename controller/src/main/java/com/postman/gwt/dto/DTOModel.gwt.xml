@@ -3,7 +3,6 @@
 <module>
 
     <inherits name='com.google.gwt.user.User'/>
-    <inherits name="com.postman.gwt.dto.DTOModel"/>
-    <entry-point class='com.postman.gwt.client.Postmangwt'/>
+    <source path=""/>
 
 </module>

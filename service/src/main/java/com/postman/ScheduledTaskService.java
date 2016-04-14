@@ -18,13 +18,13 @@ public class ScheduledTaskService {
     @Autowired
     TrackService trackService;
 
-    @Scheduled(fixedRate = 1000*60*60)
-    public void updateAllTracks(){
+    @Scheduled(fixedRate = 1000 * 60 * 60)
+    public void updateAllTracks() {
         Date startTime = new Date();
         try {
             trackService.updateAllActiveTracks();
-            long time = new Date().getTime()-startTime.getTime();
-            LOGGER.info("Scheduled update finished in "+time+"ms");
+            long time = new Date().getTime() - startTime.getTime();
+            LOGGER.info("Scheduled update finished in " + time + "ms");
         } catch (PersistenceException e) {
             LOGGER.error(e);
         }

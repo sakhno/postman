@@ -29,7 +29,7 @@ public abstract class HibernateAbstractDAO<T> implements GenericDAO<T> {
 
     @Override
     public T read(long id) throws PersistenceException {
-        return (T)getCurrentSession().get(getObjectClass(), id);
+        return (T) getCurrentSession().get(getObjectClass(), id);
     }
 
     @Override
@@ -45,6 +45,6 @@ public abstract class HibernateAbstractDAO<T> implements GenericDAO<T> {
     @Override
     public List<T> readAll() throws PersistenceException {
         Criteria criteria = getCurrentSession().createCriteria(getObjectClass());
-        return (List<T>)criteria.list();
+        return (List<T>) criteria.list();
     }
 }

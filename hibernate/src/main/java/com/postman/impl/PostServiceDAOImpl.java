@@ -1,9 +1,8 @@
 package com.postman.impl;
 
 import com.postman.HibernateAbstractDAO;
-import com.postman.PersistenceException;
-import com.postman.PostService;
 import com.postman.PostServiceDAO;
+import com.postman.model.PostService;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 

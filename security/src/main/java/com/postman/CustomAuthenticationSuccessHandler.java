@@ -1,5 +1,6 @@
 package com.postman;
 
+import com.postman.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
+
 import javax.annotation.Resource;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -27,10 +29,10 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     private LocaleResolver localeResolver;
 
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         try {
             User user = userService.getUserByLogin(userDetails.getUsername());
-            if(user!=null&&user.getLanguage()!=null){
+            if (user != null && user.getLanguage() != null) {
                 localeResolver.setLocale(request, response, new Locale(user.getLanguage().name()));
             }
         } catch (PersistenceException e) {

@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
-public class TMSinglePostService implements Serializable{
+public class TMSinglePostService implements Serializable {
     private TMMeta meta;
     @JsonProperty(value = "data")
     private TMCarrier[] carriers;

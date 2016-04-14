@@ -1,8 +1,8 @@
 package com.postman.validation;
 
 import com.postman.PersistenceException;
-import com.postman.User;
 import com.postman.UserService;
+import com.postman.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ public abstract class UserValidator extends GeneralAbstractValidator {
         return User.class.equals(aClass);
     }
 
-    protected void checkUserInDataBase(Errors errors, User user){
+    protected void checkUserInDataBase(Errors errors, User user) {
         try {
             User userFromDB = userService.getUserByLogin(user.getLogin());
-            if(userFromDB!=null&&user.getId()!=userFromDB.getId()){
+            if (userFromDB != null && user.getId() != userFromDB.getId()) {
                 errors.rejectValue("login", "invalid.loginexists");
             }
         } catch (PersistenceException e) {

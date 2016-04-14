@@ -6,7 +6,7 @@ import java.io.Serializable;
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
-public class TMCarrier implements Serializable{
+public class TMCarrier implements Serializable {
     private String name;
     private String code;
 

@@ -1,4 +1,4 @@
-package com.postman;
+package com.postman.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

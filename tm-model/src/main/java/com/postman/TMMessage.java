@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
-public class TMMessage implements Serializable{
+public class TMMessage implements Serializable {
     @JsonProperty(value = "Date")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private Date date;

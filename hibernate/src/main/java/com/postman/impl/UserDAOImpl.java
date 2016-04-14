@@ -2,8 +2,8 @@ package com.postman.impl;
 
 import com.postman.HibernateAbstractDAO;
 import com.postman.PersistenceException;
-import com.postman.User;
 import com.postman.UserDAO;
+import com.postman.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -21,6 +21,6 @@ public class UserDAOImpl extends HibernateAbstractDAO<User> implements UserDAO {
     public User getUserByLogin(String login) throws PersistenceException {
         Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
                 .add(Restrictions.eq("login", login));
-        return (User)criteria.uniqueResult();
+        return (User) criteria.uniqueResult();
     }
 }

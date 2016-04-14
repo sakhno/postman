@@ -1,5 +1,7 @@
 package com.postman;
 
+import com.postman.model.User;
+
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */

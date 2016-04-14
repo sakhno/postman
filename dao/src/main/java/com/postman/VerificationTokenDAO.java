@@ -1,5 +1,7 @@
 package com.postman;
 
+import com.postman.model.VerificationToken;
+
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */

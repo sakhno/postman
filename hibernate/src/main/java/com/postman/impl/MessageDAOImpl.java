@@ -1,6 +1,10 @@
 package com.postman.impl;
 
-import com.postman.*;
+import com.postman.HibernateAbstractDAO;
+import com.postman.MessageDAO;
+import com.postman.model.Message;
+import com.postman.model.Track;
+import com.postman.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
@@ -22,9 +26,9 @@ public class MessageDAOImpl extends HibernateAbstractDAO<Message> implements Mes
     public List<Message> readAll(String trackNumber, User user) {
         Criteria criteria = getCurrentSession().createCriteria(getObjectClass())
                 .add(Restrictions.eq("track.number", trackNumber));
-        if(user==null){
+        if (user == null) {
             criteria.add(Restrictions.isNull("track.user"));
-        }else {
+        } else {
             criteria.add(Restrictions.eq("track.user", user));
         }
         return criteria.list();

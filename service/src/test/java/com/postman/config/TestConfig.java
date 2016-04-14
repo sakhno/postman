@@ -15,7 +15,7 @@ import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 public class TestConfig {
 
     @Bean
-    public ShaPasswordEncoder shaPasswordEncoder(){
+    public ShaPasswordEncoder shaPasswordEncoder() {
         return new ShaPasswordEncoder();
     }
 

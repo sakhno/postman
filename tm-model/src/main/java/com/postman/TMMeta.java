@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
-public class TMMeta implements Serializable{
+public class TMMeta implements Serializable {
     private int code;
     private String type;
     private String message;

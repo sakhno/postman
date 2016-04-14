@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class TMCommonRequest implements Serializable{
+public class TMCommonRequest implements Serializable {
     private TMMeta meta;
 
     public TMMeta getMeta() {
