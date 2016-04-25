@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
@@ -37,16 +38,16 @@ public class MainPageController {
     }
 
     @RequestMapping("/home")
-    public String homePage(Model model, HttpServletRequest request) {
+    public String homePage(Model model, HttpServletRequest request, Principal principal) {
         notifyMyAboutVisitor(request);
-        model.addAttribute("user", getCurrentUser());
+        model.addAttribute("user", getCurrentUser(principal));
         model.addAttribute("searchForm", new SearchForm());
         return "home";
     }
 
     @RequestMapping(value = "/home", method = RequestMethod.POST)
-    public String findTrack(Model model, @ModelAttribute("searchForm") @Validated SearchForm searchForm) {
-        User user = getCurrentUser();
+    public String findTrack(Model model, @ModelAttribute("searchForm") @Validated SearchForm searchForm, Principal principal) {
+        User user = getCurrentUser(principal);
         model.addAttribute("user", user);
         String trackNumber = searchForm.getTrackNumber();
         if (trackNumber != null && !"".equals(trackNumber)) {
@@ -69,18 +70,19 @@ public class MainPageController {
         return "commingsoon";
     }
 
-    private User getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = null;
-        if (!"anonymousUser".equals(auth.getName())) {
+    private User getCurrentUser(Principal principal) {
+        if(principal!=null){
+            User user = null;
             try {
-                user = userService.getUserByLogin(auth.getName());
+                user = userService.getUserByLogin(principal.getName());
                 user.setTracks(trackService.getAllUserTracks(user));
             } catch (PersistenceException e) {
                 LOGGER.error(e);
             }
+            return user;
+        }else {
+            return null;
         }
-        return user;
     }
 
     private void notifyMyAboutVisitor(HttpServletRequest request) {
