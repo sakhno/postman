@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -82,6 +83,7 @@ public class HibernateConfig {
     }
 
     @Bean
+    @Qualifier("dataSource")
     @Profile("heroku")
     public DataSource herokuDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
