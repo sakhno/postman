@@ -105,24 +105,25 @@ public class HibernateConfig {
 
 
     @Bean
-    @Profile("default")
-    public LocalSessionFactoryBean sessionFactory() {
+//    @Profile("default")
+    @Autowired
+    public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
-        localSessionFactoryBean.setDataSource(dataSource());
+        localSessionFactoryBean.setDataSource(dataSource);
         localSessionFactoryBean.setPackagesToScan("com.postman");
         localSessionFactoryBean.setHibernateProperties(hibernateProperties());
         return localSessionFactoryBean;
     }
 
-    @Bean
-    @Profile("heroku")
-    public LocalSessionFactoryBean herokuSessionFactory() {
-        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
-        localSessionFactoryBean.setDataSource(herokuDataSource());
-        localSessionFactoryBean.setPackagesToScan("com.postman");
-        localSessionFactoryBean.setHibernateProperties(hibernateProperties());
-        return localSessionFactoryBean;
-    }
+//    @Bean
+//    @Profile("heroku")
+//    public LocalSessionFactoryBean herokuSessionFactory() {
+//        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
+//        localSessionFactoryBean.setDataSource(herokuDataSource());
+//        localSessionFactoryBean.setPackagesToScan("com.postman");
+//        localSessionFactoryBean.setHibernateProperties(hibernateProperties());
+//        return localSessionFactoryBean;
+//    }
 
     @Bean
     @Autowired
