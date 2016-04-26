@@ -83,7 +83,6 @@ public class HibernateConfig {
     }
 
     @Bean
-    @Qualifier("dataSource")
     @Profile("heroku")
     public DataSource herokuDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
@@ -106,9 +105,20 @@ public class HibernateConfig {
 
 
     @Bean
+    @Profile("default")
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
         localSessionFactoryBean.setDataSource(dataSource());
+        localSessionFactoryBean.setPackagesToScan("com.postman");
+        localSessionFactoryBean.setHibernateProperties(hibernateProperties());
+        return localSessionFactoryBean;
+    }
+
+    @Bean
+    @Profile("heroku")
+    public LocalSessionFactoryBean herokuSessionFactory() {
+        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
+        localSessionFactoryBean.setDataSource(herokuDataSource());
         localSessionFactoryBean.setPackagesToScan("com.postman");
         localSessionFactoryBean.setHibernateProperties(hibernateProperties());
         return localSessionFactoryBean;
