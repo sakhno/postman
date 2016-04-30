@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -22,19 +23,24 @@ public class TranslationServiceImpl implements TranslationService {
 
     @PostConstruct
     private void initMethod(){
-        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE_NAME)){
-            if(inputStream.available()>0){//trying to set azure properties from local file
+        URL url = getClass().getClassLoader().getResource(CONFIG_FILE_NAME);
+        if(url!=null){
+            //trying to set azure properties from local file
+            try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(CONFIG_FILE_NAME)){
                 Properties prop = new Properties();
                 prop.load(inputStream);
                 Translate.setClientId(prop.getProperty("AZURE_CLIENT_ID"));
                 Translate.setClientSecret(prop.getProperty("AZURE_CLIENT_SECRET"));
-            }else {//trying to set azure properties from system variables (heroku)
-                Translate.setClientId(System.getProperty("AZURE_CLIENT_ID"));
-                Translate.setClientSecret(System.getProperty("AZURE_CLIENT_SECRET"));
+            } catch (IOException e) {
+                LOGGER.error(e);
             }
-        } catch (IOException e) {
-            LOGGER.error(e);
+
+        }else {
+            //trying to set azure properties from system variables (heroku)
+            Translate.setClientId(System.getProperty("AZURE_CLIENT_ID"));
+            Translate.setClientSecret(System.getProperty("AZURE_CLIENT_SECRET"));
         }
+
 
 
     }
