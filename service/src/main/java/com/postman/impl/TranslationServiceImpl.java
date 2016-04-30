@@ -37,8 +37,8 @@ public class TranslationServiceImpl implements TranslationService {
 
         }else {
             //trying to set azure properties from system variables (heroku)
-            Translate.setClientId(System.getProperty("AZURE_CLIENT_ID"));
-            Translate.setClientSecret(System.getProperty("AZURE_CLIENT_SECRET"));
+            Translate.setClientId(System.getenv("AZURE_CLIENT_ID"));
+            Translate.setClientSecret(System.getenv("AZURE_CLIENT_SECRET"));
         }
 
 
