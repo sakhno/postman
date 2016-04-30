@@ -7,6 +7,7 @@ import com.postman.validation.SearchForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Locale;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
@@ -26,11 +28,13 @@ import java.security.Principal;
 public class MainPageController {
     private static final Logger LOGGER = LogManager.getLogger(MainPageController.class);
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    TrackService trackService;
+    private TrackService trackService;
     @Autowired
-    MailService mailService;
+    private MailService mailService;
+    @Autowired
+    private TranslationService translationService;
 
     @RequestMapping("/")
     public String index() {
@@ -53,6 +57,7 @@ public class MainPageController {
         if (trackNumber != null && !"".equals(trackNumber)) {
             try {
                 Track track = trackService.getTrack(trackNumber, user);
+                translateMessages(track);
                 model.addAttribute("track", track);
                 return "home";
             } catch (PersistenceException e) {
@@ -82,6 +87,16 @@ public class MainPageController {
             return user;
         }else {
             return null;
+        }
+    }
+
+    //translates messages of track to current session locale language
+    private void translateMessages(Track track){
+        Locale locale = LocaleContextHolder.getLocale();
+        try {
+            track.setMessages(translationService.translate(track.getMessages(), locale));
+        } catch (Exception e) {
+            LOGGER.error("translation failed", e);
         }
     }
 

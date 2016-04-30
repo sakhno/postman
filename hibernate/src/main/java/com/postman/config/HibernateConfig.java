@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Properties;
@@ -28,47 +29,13 @@ public class HibernateConfig {
     private static final Logger LOGGER = LogManager.getLogger(HibernateConfig.class);
     private static final String PROPERTY_FILE_NAME = "postgresql_config.properties";
 
-//    @Bean
-//    public DataSource dataSource() {
-//        BasicDataSource dataSource = new BasicDataSource();
-//        try {
-//            Properties prop = new Properties();
-//            prop.load(getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE_NAME));
-//            dataSource.setDriverClassName(prop.getProperty("driver"));
-//            dataSource.setUrl(prop.getProperty("url"));
-//            dataSource.setUsername(prop.getProperty("user"));
-//            dataSource.setPassword(prop.getProperty("password"));
-//            dataSource.setInitialSize(10);
-//            dataSource.setMaxTotal(70);
-//            dataSource.setMaxIdle(30);
-//        } catch (IOException e) {
-//            LOGGER.error(e);
-//        } catch (NullPointerException e) {
-//            LOGGER.warn("property file not found, trying to connect by getting system variable");
-//            URI dbUri = null;
-//            try {
-//                dbUri = new URI(System.getenv("DATABASE_URL"));
-//            } catch (URISyntaxException e1) {
-//                LOGGER.error(e1);
-//            }
-//            dataSource.setDriverClassName("org.postgresql.Driver");
-//            dataSource.setUrl("jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath());
-//            dataSource.setUsername(dbUri.getUserInfo().split(":")[0]);
-//            dataSource.setPassword(dbUri.getUserInfo().split(":")[1]);
-//            dataSource.setInitialSize(10);
-//            dataSource.setMaxTotal(70);
-//            dataSource.setMaxIdle(30);
-//        }
-//        return dataSource;
-//    }
-
     @Bean
     @Profile("default")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        try {
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE_NAME)){
             Properties prop = new Properties();
-            prop.load(getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE_NAME));
+            prop.load(inputStream);
             dataSource.setDriverClassName(prop.getProperty("driver"));
             dataSource.setUrl(prop.getProperty("url"));
             dataSource.setUsername(prop.getProperty("user"));
@@ -105,7 +72,6 @@ public class HibernateConfig {
 
 
     @Bean
-//    @Profile("default")
     @Autowired
     public LocalSessionFactoryBean sessionFactory(DataSource dataSource) {
         LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
@@ -114,16 +80,6 @@ public class HibernateConfig {
         localSessionFactoryBean.setHibernateProperties(hibernateProperties());
         return localSessionFactoryBean;
     }
-
-//    @Bean
-//    @Profile("heroku")
-//    public LocalSessionFactoryBean herokuSessionFactory() {
-//        LocalSessionFactoryBean localSessionFactoryBean = new LocalSessionFactoryBean();
-//        localSessionFactoryBean.setDataSource(herokuDataSource());
-//        localSessionFactoryBean.setPackagesToScan("com.postman");
-//        localSessionFactoryBean.setHibernateProperties(hibernateProperties());
-//        return localSessionFactoryBean;
-//    }
 
     @Bean
     @Autowired

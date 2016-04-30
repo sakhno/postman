@@ -33,6 +33,7 @@
         <gwt.version>2.7.0</gwt.version>
         <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
         <dozer.version>5.5.1</dozer.version>
+        <jsp-api.version>2.2.1-b03</jsp-api.version>
     </properties>
 
     <build>

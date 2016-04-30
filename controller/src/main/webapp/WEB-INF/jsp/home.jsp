@@ -69,7 +69,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <input class="btn btn-primary col-sm-12 btn-lg" type="submit"
-                                               value="<spring:message code="find"/>">
+                                               value="<spring:message code='find'/>">
                                     </c:otherwise>
                                 </c:choose>
                             </div>

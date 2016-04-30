@@ -19,6 +19,13 @@ public class Message implements Serializable {
     private boolean readed;
     private Date date;
 
+    public Message() {}
+
+    public Message(String text, Date date) {
+        this.text = text;
+        this.date = date;
+    }
+
     public long getId() {
         return id;
     }
