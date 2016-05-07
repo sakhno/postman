@@ -57,7 +57,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         //TODO значит нужно замапить все имена на этот контроллер
         //и в нем сделать массив контроллеров для обработки запросов
         urlProperties.put("/**/postmanGwtServices/tracksManageService", "quoteController");
-
         mapping.setMappings(urlProperties);
         return mapping;
     }
@@ -104,11 +103,4 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(debugInterceptor);
     }
 
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:messages");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
 }

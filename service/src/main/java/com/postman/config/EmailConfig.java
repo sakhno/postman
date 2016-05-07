@@ -1,28 +1,68 @@
 package com.postman.config;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.context.annotation.Profile;
+import javax.mail.Authenticator;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 @Configuration
 public class EmailConfig {
+    private static final Logger LOGGER = LogManager.getLogger(EmailConfig.class);
+    private static final String MAIL_CONFIG = "mailservice_config.properties";
     private static final String SMTP_HOST_NAME = "smtp.sendgrid.net";
     private static final int SMTP_PORT = 587;
-    private static final String SMTP_AUTH_USER = System.getenv("SENDGRID_USERNAME");
-    private static final String SMTP_AUTH_PWD = System.getenv("SENDGRID_PASSWORD");
 
     @Bean
-    public JavaMailSender mailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(SMTP_HOST_NAME);
-        mailSender.setPort(SMTP_PORT);
-        mailSender.setUsername(SMTP_AUTH_USER);
-        mailSender.setPassword(SMTP_AUTH_PWD);
-        mailSender.setDefaultEncoding("iso-8859-1");
-        return mailSender;
+    @Profile("default")
+    public Session mailSession(){
+        Properties props = new Properties();
+        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(MAIL_CONFIG)){
+            props.load(inputStream);
+        } catch (IOException e) {
+            LOGGER.error(e);
+        }
+        final String userName = props.getProperty("mail.username");
+        final String password = props.getProperty("mail.password");
+        Session session = Session.getDefaultInstance(generalMailProperties(), new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        });
+        return session;
     }
+
+    @Bean
+    @Profile("heroku")
+    public Session herokuMailSession(){
+        Session session = Session.getDefaultInstance(generalMailProperties(), new Authenticator() {
+            private String userName = System.getenv("SENDGRID_USERNAME");
+            private String password = System.getenv("SENDGRID_PASSWORD");
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(userName, password);
+            }
+        });
+        return session;
+    }
+
+    private Properties generalMailProperties(){
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", SMTP_HOST_NAME);
+        props.put("mail.smtp.port", SMTP_PORT);
+        return props;
+    }
+
 }
