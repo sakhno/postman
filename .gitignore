@@ -2,6 +2,4 @@
 /service/logs
 /service/src/main/resources/mailservice_config.properties
 /hibernate/src/main/resources/postgresql_config.properties
-# Created by .ignore support plugin (hsz.mobi)
-/bin/
-/pom.xml
+/mongodbDAO/src/main/resources/mongodb_config.properties

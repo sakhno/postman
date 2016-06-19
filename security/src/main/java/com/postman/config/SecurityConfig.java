@@ -1,4 +1,4 @@
-package com.postman;
+package com.postman.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

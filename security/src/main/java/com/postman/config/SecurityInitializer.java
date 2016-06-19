@@ -1,4 +1,4 @@
-package com.postman;
+package com.postman.config;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

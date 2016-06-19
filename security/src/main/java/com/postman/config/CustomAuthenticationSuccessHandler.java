@@ -1,5 +1,7 @@
-package com.postman;
+package com.postman.config;
 
+import com.postman.PersistenceException;
+import com.postman.UserService;
 import com.postman.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

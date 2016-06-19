@@ -34,7 +34,7 @@ import java.util.Properties;
 @EnableWebMvc
 @EnableScheduling
 @EnableAspectJAutoProxy
-@ComponentScan("com.postman")
+@ComponentScan({"com.postman"})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired

@@ -16,6 +16,7 @@
         <module>service</module>
         <module>dao</module>
         <module>tm-model</module>
+        <module>mongodbDAO</module>
     </modules>
 
     <properties>
