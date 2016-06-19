@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -97,6 +98,10 @@ public class HibernateConfig {
                 setProperty("hibernate.format_sql", "true");
                 setProperty("hibernate.use_sql_comments", "true");
                 setProperty("hibernate.hbm2ddl.auto", "update");
+                setProperty("hibernate.cache.use_second_level_cache", "true");
+                setProperty("hibernate.cache.use_query_cache", "true");
+                setProperty("net.sf.ehcache.configurationResourceName", "/myehcache.xml");
+                setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory");
             }
         };
     }

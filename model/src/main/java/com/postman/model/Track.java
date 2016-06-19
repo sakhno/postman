@@ -1,6 +1,13 @@
 package com.postman.model;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
+
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +17,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "track")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "test")
 public class Track implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -150,6 +158,7 @@ public class Track implements Serializable {
         return dateCreated.equals(track.dateCreated);
 
     }
+
 
     @Override
     public int hashCode() {

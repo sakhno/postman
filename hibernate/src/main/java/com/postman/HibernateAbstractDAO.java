@@ -3,13 +3,16 @@ package com.postman;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
+@Transactional
 public abstract class HibernateAbstractDAO<T> implements GenericDAO<T> {
 
     @Autowired

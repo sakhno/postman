@@ -1,6 +1,11 @@
 package com.postman.model;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,6 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "messages")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE, region = "test")
 public class Message implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

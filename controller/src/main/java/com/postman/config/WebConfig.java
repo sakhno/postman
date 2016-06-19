@@ -39,42 +39,42 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
     private DebugInterceptor debugInterceptor;
-    @Autowired
-    private TracksManageService tracksManageService;
+//    @Autowired
+//    private TracksManageService tracksManageService;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/com.postman.gwt.Postmangwt/**").addResourceLocations("/com.postman.gwt.Postmangwt/");
+//        registry.addResourceHandler("/com.postman.gwt.Postmangwt/**").addResourceLocations("/com.postman.gwt.Postmangwt/");
     }
 
-    @Bean
-    public SimpleUrlHandlerMapping GWTUrlHandlerMapping() {
-        SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
-        mapping.setOrder(Integer.MAX_VALUE - 2);
+//    @Bean
+//    public SimpleUrlHandlerMapping GWTUrlHandlerMapping() {
+//        SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+//        mapping.setOrder(Integer.MAX_VALUE - 2);
+//
+//        Properties urlProperties = new Properties();
+//        //TODO значит нужно замапить все имена на этот контроллер
+//        //и в нем сделать массив контроллеров для обработки запросов
+//        urlProperties.put("/**/postmanGwtServices/tracksManageService", "quoteController");
+//        mapping.setMappings(urlProperties);
+//        return mapping;
+//    }
+//
+//    @Bean(name = "quoteController")
+//    public GwtRpcController gwtRpcController() {
+//        GwtRpcController controller = new GwtRpcController();
+//        controller.setRemoteService(tracksManageService);
+//        return controller;
+//    }
 
-        Properties urlProperties = new Properties();
-        //TODO значит нужно замапить все имена на этот контроллер
-        //и в нем сделать массив контроллеров для обработки запросов
-        urlProperties.put("/**/postmanGwtServices/tracksManageService", "quoteController");
-        mapping.setMappings(urlProperties);
-        return mapping;
-    }
-
-    @Bean(name = "quoteController")
-    public GwtRpcController gwtRpcController() {
-        GwtRpcController controller = new GwtRpcController();
-        controller.setRemoteService(tracksManageService);
-        return controller;
-    }
-
-    @Bean
-    public DozerBeanMapperFactoryBean configDozer() throws IOException {
-        DozerBeanMapperFactoryBean mapper = new DozerBeanMapperFactoryBean();
-        Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath*:dozer-mapping.xml");
-        mapper.setMappingFiles(resources);
-        return mapper;
-    }
+//    @Bean
+//    public DozerBeanMapperFactoryBean configDozer() throws IOException {
+//        DozerBeanMapperFactoryBean mapper = new DozerBeanMapperFactoryBean();
+//        Resource[] resources = new PathMatchingResourcePatternResolver().getResources("classpath*:dozer-mapping.xml");
+//        mapper.setMappingFiles(resources);
+//        return mapper;
+//    }
 
     @Bean
     public UrlBasedViewResolver setupViewResolver() {

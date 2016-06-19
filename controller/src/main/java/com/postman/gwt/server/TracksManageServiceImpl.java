@@ -21,7 +21,7 @@ import java.util.ArrayList;
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
-@Service
+//@Service
 public class TracksManageServiceImpl implements TracksManageService {
     private static final Logger LOGGER = LogManager.getLogger(TracksManageServiceImpl.class);
     @Autowired

@@ -34,6 +34,7 @@
         <maven-source-plugin.version>3.0.0</maven-source-plugin.version>
         <dozer.version>5.5.1</dozer.version>
         <jsp-api.version>2.2.1-b03</jsp-api.version>
+        <ehcache.version>2.6.11</ehcache.version>
     </properties>
 
     <build>
@@ -79,19 +80,19 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwt.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>test</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>gwt-maven-plugin</artifactId>-->
+                <!--<version>${gwt.version}</version>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>compile</goal>-->
+                            <!--<goal>test</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 
