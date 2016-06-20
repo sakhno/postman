@@ -6,12 +6,14 @@ import com.postman.UserDAO;
 import com.postman.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 @Repository
+@Qualifier("hibernateUserDAO")
 public class UserDAOImpl extends HibernateAbstractDAO<User> implements UserDAO {
     @Override
     public Class getObjectClass() {

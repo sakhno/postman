@@ -6,6 +6,7 @@ import com.postman.model.VerificationToken;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,10 +27,14 @@ public class UserServiceImpl implements UserService {
     private static final String BASE_URL_LOCALHOST = "http://localhost:8080/users/confirmation";
     private static final String BASE_URL_HEROKU = "http://postmancom.herokuapp.com/users/confirmation";
     @Autowired
+//    @Qualifier("hibernateUserDAO")
+    @Qualifier("mongoUserDAO")
     private UserDAO userDAO;
     @Autowired
     private ShaPasswordEncoder shaPasswordEncoder;
     @Autowired
+//    @Qualifier("hibernateVerificationTokenDAO")
+    @Qualifier("mongoVerificationTokenDAO")
     private VerificationTokenDAO verificationTokenDAO;
     @Autowired
     private MailService mailService;

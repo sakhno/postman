@@ -8,6 +8,7 @@ import com.postman.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,15 +25,21 @@ import java.util.Map;
 public class TrackServiceImpl implements TrackService {
     private static final Logger LOGGER = LogManager.getLogger(TrackServiceImpl.class);
     @Autowired
-    TrackDAO trackDAO;
+//    @Qualifier("hibernateTrackDAO")
+    @Qualifier("mongoTrackDAO")
+    private TrackDAO trackDAO;
     @Autowired
-    PostServiceDAO postServiceDAO;
+//    @Qualifier("hibernatePostServiceDAO")
+    @Qualifier("mongoPostServiceDAO")
+    private PostServiceDAO postServiceDAO;
     @Autowired
-    TrackingService trackingService;
+    private TrackingService trackingService;
     @Autowired
-    MessageDAO messageDAO;
+//    @Qualifier("hibernateMessageDAO")
+    @Qualifier("mongoMessageDAO")
+    private MessageDAO messageDAO;
     @Autowired
-    MailService mailService;
+    private MailService mailService;
 
     @Override
     public Track saveTrack(Track track) throws PersistenceException {

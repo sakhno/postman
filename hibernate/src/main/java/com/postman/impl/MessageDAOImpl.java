@@ -8,6 +8,7 @@ import com.postman.model.User;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 @Repository
+@Qualifier("hibernateMessageDAO")
 public class MessageDAOImpl extends HibernateAbstractDAO<Message> implements MessageDAO {
     @Override
     public Class getObjectClass() {

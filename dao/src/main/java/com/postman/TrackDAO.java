@@ -9,9 +9,9 @@ import java.util.List;
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 public interface TrackDAO extends GenericDAO<Track> {
-    Track getTrackByNumberAndUser(Track track);
+    Track getTrackByNumberAndUser(Track track) throws PersistenceException;
 
-    List<Track> getAllUserTracks(User user);
+    List<Track> getAllUserTracks(User user) throws PersistenceException;
 
-    List<Track> getAllActiveTracks();
+    List<Track> getAllActiveTracks() throws PersistenceException;
 }

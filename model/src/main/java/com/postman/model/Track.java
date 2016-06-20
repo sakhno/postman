@@ -1,13 +1,9 @@
 package com.postman.model;
 
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

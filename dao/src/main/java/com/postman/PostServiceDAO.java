@@ -7,5 +7,5 @@ import com.postman.model.PostService;
  */
 public interface PostServiceDAO extends GenericDAO<PostService> {
 
-    PostService getPostServiceByCode(String code);
+    PostService getPostServiceByCode(String code) throws PersistenceException;
 }

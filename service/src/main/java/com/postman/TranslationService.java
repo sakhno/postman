@@ -10,6 +10,8 @@ import java.util.Locale;
  */
 public interface TranslationService {
     String translate(String str, Locale locale) throws Exception;
+
     String[] translate(String[] textMessages, Locale locale) throws Exception;
+
     List<Message> translate(List<Message> messages, Locale locale) throws Exception;
 }

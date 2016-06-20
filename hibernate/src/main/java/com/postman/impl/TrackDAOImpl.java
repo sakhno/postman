@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
 @Repository
+@Qualifier("hibernateTrackDAO")
 public class TrackDAOImpl extends HibernateAbstractDAO<Track> implements TrackDAO {
     private static final Logger LOGGER = LogManager.getLogger(TrackDAOImpl.class);
 

@@ -1,11 +1,9 @@
 package com.postman.model;
 
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,7 +23,8 @@ public class Message implements Serializable {
     private boolean readed;
     private Date date;
 
-    public Message() {}
+    public Message() {
+    }
 
     public Message(String text, Date date) {
         this.text = text;

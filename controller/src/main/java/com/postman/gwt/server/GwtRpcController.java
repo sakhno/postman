@@ -24,13 +24,13 @@ public class GwtRpcController extends RemoteServiceServlet implements Controller
     private Class remoteServiceClass;
 
     @Override
-    public void setServletContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
+    public ServletContext getServletContext() {
+        return servletContext;
     }
 
     @Override
-    public ServletContext getServletContext() {
-        return servletContext;
+    public void setServletContext(ServletContext servletContext) {
+        this.servletContext = servletContext;
     }
 
     @Override

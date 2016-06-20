@@ -9,17 +9,23 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import javax.mail.*;
+
+import javax.mail.Address;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author Anton Sakhno <antonsakhno.work@gmail.com>
  */
 @Service
-public class MailServiceImpl implements MailService{
+public class MailServiceImpl implements MailService {
     private final static Logger LOGGER = LogManager.getLogger(MailServiceImpl.class);
     private static final String DEFAULT_FROM_ADDRESS = "service.postman@gmail.com";
 
@@ -74,7 +80,7 @@ public class MailServiceImpl implements MailService{
 
     private javax.mail.Message makeNotifyLetter(User user, List<Message> messages) throws MessagingException {
         MimeMessage mailMessage = new MimeMessage(session);
-        Locale locale =  new Locale(user.getLanguage().name());
+        Locale locale = new Locale(user.getLanguage().name());
         mailMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(user.getLogin()));
         mailMessage.setFrom(new InternetAddress(DEFAULT_FROM_ADDRESS));
         mailMessage.setSubject(messageSource.getMessage("mail.notification.subject", null, locale));

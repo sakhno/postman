@@ -11,16 +11,16 @@
         <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="${PATTERN}"/>
         </Console>
-        <RollingFile name="fileWriter"
-                     fileName="${LOG_DIR}/crm-ocean.log"
-                     filePattern="${ARCHIVE}/crm-ocean.log.%i">
-            <PatternLayout pattern="${PATTERN}"/>
-            <Policies>
-                <SizeBasedTriggeringPolicy size="10MB"/>
-            </Policies>
-            <DefaultRolloverStrategy max="10"/>
-            <PatternLayout pattern="${PATTERN}"/>
-        </RollingFile>
+        <!--<RollingFile name="fileWriter"-->
+        <!--fileName="${LOG_DIR}/crm-ocean.log"-->
+        <!--filePattern="${ARCHIVE}/crm-ocean.log.%i">-->
+        <!--<PatternLayout pattern="${PATTERN}"/>-->
+        <!--<Policies>-->
+        <!--<SizeBasedTriggeringPolicy size="10MB"/>-->
+        <!--</Policies>-->
+        <!--<DefaultRolloverStrategy max="10"/>-->
+        <!--<PatternLayout pattern="${PATTERN}"/>-->
+        <!--</RollingFile>-->
         <SMTP name="Mail" subject="Error Log" to="service.postmancom@gmail.com" from="service.postmancom@gmail.com"
               smtpHost="smtp.sendgrid.net" smtpPort="587" bufferSize="50" smtpUsername="${SENDGRID_USERNAME}"
               smtpPassword="${SENDGRID_PASSWORD}">

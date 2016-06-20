@@ -17,7 +17,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author Anton Sakhno <antonsakhno.work@gmail.com>
@@ -51,13 +52,13 @@ public class TranslationServiceTest {
     private TrackingService trackingService;
 
     @Test
-    public void SingleStringTranslationTest() throws Exception{
+    public void SingleStringTranslationTest() throws Exception {
         String result = translationService.translate(STRING_TO_TRANSLATE_EN_1, LOCALE_RU);
         assertEquals(STRING_EXPECTED_EN_1, result);
     }
 
     @Test
-    public void MultipleStringTranslationTest() throws Exception{
+    public void MultipleStringTranslationTest() throws Exception {
         String[] textMessages = {
                 STRING_TO_TRANSLATE_EN_1,
                 STRING_TO_TRANSLATE_FR_1,
@@ -71,14 +72,14 @@ public class TranslationServiceTest {
         assertEquals(6, result.length);
         assertEquals(STRING_EXPECTED_EN_1, result[0]);
         assertEquals(STRING_EXPECTED_FR_1, result[1]);
-        assertEquals(STRING_EXPECTED_CH,   result[2]);
+        assertEquals(STRING_EXPECTED_CH, result[2]);
         assertEquals(STRING_EXPECTED_FR_2, result[3]);
         assertEquals(STRING_EXPECTED_FR_3, result[4]);
         assertEquals(STRING_EXPECTED_EN_2, result[5]);
     }
 
     @Test
-    public void ListOfMessagesTranslationTest() throws Exception{
+    public void ListOfMessagesTranslationTest() throws Exception {
         //creating test message List
         List<Message> messages = new ArrayList<>();
         messages.add(new Message(STRING_TO_TRANSLATE_EN_1, new Date()));
@@ -92,7 +93,7 @@ public class TranslationServiceTest {
         assertEquals(6, translatedMessages.size());
         assertEquals(STRING_EXPECTED_EN_1, translatedMessages.get(0).getText());
         assertEquals(STRING_EXPECTED_FR_1, translatedMessages.get(1).getText());
-        assertEquals(STRING_EXPECTED_CH,   translatedMessages.get(2).getText());
+        assertEquals(STRING_EXPECTED_CH, translatedMessages.get(2).getText());
         assertEquals(STRING_EXPECTED_FR_2, translatedMessages.get(3).getText());
         assertEquals(STRING_EXPECTED_FR_3, translatedMessages.get(4).getText());
         assertEquals(STRING_EXPECTED_EN_2, translatedMessages.get(5).getText());
@@ -106,7 +107,7 @@ public class TranslationServiceTest {
     }
 
     @Test
-    public void NullTests() throws Exception{
+    public void NullTests() throws Exception {
         String[] singleResult = translationService.translate(new String[0], LOCALE_RU);
         assertEquals(0, singleResult.length);
         List<Message> messages = translationService.translate(new ArrayList<Message>(), LOCALE_RU);
@@ -116,7 +117,7 @@ public class TranslationServiceTest {
 
     @Ignore //test fails because of microsoft-translator-java-api bug (Exception thrown)
     @Test
-    public void badTrackTranslationTest() throws Exception{
+    public void badTrackTranslationTest() throws Exception {
         Track track = trackingService.getSingleTrack(BAD_TRACK);
         List<Message> translatedMessages = translationService.translate(track.getMessages(), LOCALE_RU);
 
@@ -124,15 +125,15 @@ public class TranslationServiceTest {
         assertEquals(track.getMessages().size(), translatedMessages.size());
     }
 
-    private void debagArrayContent(String[] array){
+    private void debagArrayContent(String[] array) {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        for (String str: array){
+        for (String str : array) {
             sb.append("\"");
             sb.append(str);
             sb.append("\", ");
         }
-        sb.delete(sb.length()-2, sb.length()-1);
+        sb.delete(sb.length() - 2, sb.length() - 1);
         sb.append("]");
         LOGGER.debug(sb.toString());
     }

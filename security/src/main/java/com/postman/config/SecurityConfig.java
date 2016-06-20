@@ -22,9 +22,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final Logger LOGGER = LogManager.getLogger(SecurityConfig.class);
     @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
     AuthenticationSuccessHandler authenticationSuccessHandler;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
     @Bean
     public ShaPasswordEncoder shaPasswordEncoder() {

@@ -5,14 +5,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -34,7 +32,7 @@ public class HibernateConfig {
     @Profile("default")
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE_NAME)){
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(PROPERTY_FILE_NAME)) {
             Properties prop = new Properties();
             prop.load(inputStream);
             dataSource.setDriverClassName(prop.getProperty("driver"));
@@ -69,7 +67,6 @@ public class HibernateConfig {
         dataSource.setMaxIdle(30);
         return dataSource;
     }
-
 
 
     @Bean

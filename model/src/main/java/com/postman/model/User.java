@@ -1,12 +1,6 @@
 package com.postman.model;
 
-import org.hibernate.annotations.*;
-import org.hibernate.annotations.Cache;
-
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
@@ -112,5 +106,54 @@ public class User implements Serializable {
     public User setActive(boolean active) {
         this.active = active;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
+                ", tracks=" + tracks +
+                ", notifyByEmail=" + notifyByEmail +
+                ", active=" + active +
+                ", language=" + language +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (id != user.id) return false;
+        if (notifyByEmail != user.notifyByEmail) return false;
+        if (active != user.active) return false;
+        if (login != null ? !login.equals(user.login) : user.login != null) return false;
+        if (name != null ? !name.equals(user.name) : user.name != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (confirmPassword != null ? !confirmPassword.equals(user.confirmPassword) : user.confirmPassword != null)
+            return false;
+        if (tracks != null ? !tracks.equals(user.tracks) : user.tracks != null) return false;
+        return language == user.language;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (confirmPassword != null ? confirmPassword.hashCode() : 0);
+        result = 31 * result + (tracks != null ? tracks.hashCode() : 0);
+        result = 31 * result + (notifyByEmail ? 1 : 0);
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + (language != null ? language.hashCode() : 0);
+        return result;
     }
 }

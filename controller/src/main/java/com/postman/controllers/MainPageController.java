@@ -8,8 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -76,7 +74,7 @@ public class MainPageController {
     }
 
     private User getCurrentUser(Principal principal) {
-        if(principal!=null){
+        if (principal != null) {
             User user = null;
             try {
                 user = userService.getUserByLogin(principal.getName());
@@ -85,13 +83,13 @@ public class MainPageController {
                 LOGGER.error(e);
             }
             return user;
-        }else {
+        } else {
             return null;
         }
     }
 
     //translates messages of track to current session locale language
-    private void translateMessages(Track track){
+    private void translateMessages(Track track) {
         Locale locale = LocaleContextHolder.getLocale();
         try {
             track.setMessages(translationService.translate(track.getMessages(), locale));

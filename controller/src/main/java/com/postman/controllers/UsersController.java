@@ -35,6 +35,8 @@ import java.util.Map;
 public class UsersController {
     private static final Logger LOGGER = LogManager.getLogger(UsersController.class);
     @Autowired
+    protected AuthenticationManager authenticationManager;
+    @Autowired
     private UserService userService;
     @Autowired
     private ShaPasswordEncoder shaPasswordEncoder;
@@ -42,8 +44,6 @@ public class UsersController {
     private AddUserValidator addUserValidator;
     @Autowired
     private EditUserValidation editUserValidation;
-    @Autowired
-    protected AuthenticationManager authenticationManager;
 
     @InitBinder("userForm")
     protected void initUserFormBinder(WebDataBinder binder) {

@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
 import javax.mail.Authenticator;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
@@ -24,9 +25,9 @@ public class EmailConfig {
 
     @Bean
     @Profile("default")
-    public Session mailSession(){
+    public Session mailSession() {
         Properties props = new Properties();
-        try(InputStream inputStream = getClass().getClassLoader().getResourceAsStream(MAIL_CONFIG)){
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(MAIL_CONFIG)) {
             props.load(inputStream);
         } catch (IOException e) {
             LOGGER.error(e);
@@ -44,10 +45,11 @@ public class EmailConfig {
 
     @Bean
     @Profile("heroku")
-    public Session herokuMailSession(){
+    public Session herokuMailSession() {
         Session session = Session.getDefaultInstance(generalMailProperties(), new Authenticator() {
             private String userName = System.getenv("SENDGRID_USERNAME");
             private String password = System.getenv("SENDGRID_PASSWORD");
+
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(userName, password);
@@ -56,7 +58,7 @@ public class EmailConfig {
         return session;
     }
 
-    private Properties generalMailProperties(){
+    private Properties generalMailProperties() {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
