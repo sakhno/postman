@@ -95,10 +95,11 @@ public class TrackMongoDAOImpl extends MongoDBAbstractDAO<Track> implements Trac
 
     @Override
     public Track getTrackByNumberAndUser(Track track) throws PersistenceException {
-        Document doc = getCollection().find(and(
-                eq("number", track.getNumber()),
-                eq("userId", track.getUser().getId()))).first();
-        return parseResult(doc);
+        Document filter = new Document("number", track.getNumber());
+        if(track.getUser()!=null){
+            filter.append("userId", track.getUser().getId());
+        }
+        return parseResult(getCollection().find(filter).first());
     }
 
     @Override

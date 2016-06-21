@@ -66,7 +66,7 @@ public class MessageMongoDAOImpl extends MongoDBAbstractDAO<Message> implements 
 
     @Override
     protected Document createObjectDocument(Message object) {
-        return createObjectDocument(object);
+        return createMessageDocument(object);
     }
 
     @Override

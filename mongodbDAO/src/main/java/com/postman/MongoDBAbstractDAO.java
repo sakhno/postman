@@ -112,12 +112,12 @@ public abstract class MongoDBAbstractDAO<T> implements GenericDAO<T> {
     protected List<Document> createMessagesDocument(List<Message> messages) {
         List<Document> documents = new ArrayList<>();
         for (Message message : messages) {
-            documents.add(createObjectDocument(message));
+            documents.add(createMessageDocument(message));
         }
         return documents;
     }
 
-    private Document createObjectDocument(Message message) {
+    protected Document createMessageDocument(Message message) {
         return new Document("text", message.getText())
                 .append("date", message.getDate())
                 .append("readed", message.isReaded());
