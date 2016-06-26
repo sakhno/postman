@@ -38,9 +38,8 @@ public class MessageMongoDAOImpl extends MongoDBAbstractDAO<Message> implements 
         Document document = getCollection().aggregate(asList(
                 unwind("$messages"),
                 match(and(eq("userId", user.getId()), eq("messages.readed", false))),
-                project(doc("count", doc("$add", 1))),
-                doc("$group", doc("_id", "$messages").append("number", doc("$sum", "$count"))))).first();
-        return document.getLong("number").intValue();
+                doc("$group", doc("_id", "null").append("count", doc("$sum", 1))))).first();
+        return document.getLong("count").intValue();
     }
 
     @Override
@@ -48,10 +47,8 @@ public class MessageMongoDAOImpl extends MongoDBAbstractDAO<Message> implements 
         Document document = getCollection().aggregate(asList(
                 unwind("$messages"),
                 match(and(eq("_id", track.getId()), eq("messages.readed", false))),
-                project(doc("count", doc("$add", 1))),
-                doc("$group", doc("_id", "$messages").append("number", doc("$sum", "$count"))))).first();
-        System.out.println(document);
-        return document.getLong("number").intValue();
+                doc("$group", doc("_id", "null").append("count", doc("$sum", 1))))).first();
+        return document.getLong("count").intValue();
     }
 
     @Override

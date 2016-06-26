@@ -26,6 +26,7 @@ import java.util.List;
 @ContextConfiguration(classes = TestConfig.class)
 public class TrackServiceTest {
     private static final Logger LOGGER = LogManager.getLogger(TrackServiceTest.class);
+    private static final int MESSAGE_NUMBER = 6;
     private User user;
     private Track track;
     @Autowired
@@ -41,12 +42,8 @@ public class TrackServiceTest {
         track.setDateCreated(new Date());
         List<Message> messages = new ArrayList<>();
         boolean flag;
-        for (int n = 1; n < 6; n++) {
-            if (n % 2 == 0) {
-                flag = true;
-            } else {
-                flag = false;
-            }
+        for (int n = 1; n < MESSAGE_NUMBER; n++) {
+            flag = (n % 2 == 0);
             messages.add(new Message().setReaded(flag).setTrack(track));
         }
         track.setMessages(messages);
@@ -55,10 +52,8 @@ public class TrackServiceTest {
 
     @Test
     public void getNumberTest() throws PersistenceException, TrackNotFoundException {
-        LOGGER.debug(trackService.getNumberOfUnreadMessages(user));
-        LOGGER.debug(trackService.getNumberOfUnreadMessages(track));
-        Assert.assertEquals(3, trackService.getNumberOfUnreadMessages(track));
-        Assert.assertEquals(3, trackService.getNumberOfUnreadMessages(user));
+        Assert.assertEquals(MESSAGE_NUMBER/2, trackService.getNumberOfUnreadMessages(track));
+        Assert.assertEquals(MESSAGE_NUMBER/2, trackService.getNumberOfUnreadMessages(user));
     }
 
     @After
