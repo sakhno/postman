@@ -115,12 +115,11 @@ public class TranslationServiceTest {
 
     }
 
-    @Ignore //test fails because of microsoft-translator-java-api bug (Exception thrown)
     @Test
     public void badTrackTranslationTest() throws Exception {
         Track track = trackingService.getSingleTrack(BAD_TRACK);
         List<Message> translatedMessages = translationService.translate(track.getMessages(), LOCALE_RU);
-
+        LOGGER.info(translatedMessages);
         assertNotNull(translatedMessages);
         assertEquals(track.getMessages().size(), translatedMessages.size());
     }

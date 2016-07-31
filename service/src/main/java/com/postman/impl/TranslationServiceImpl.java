@@ -8,6 +8,7 @@ import com.postman.model.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class TranslationServiceImpl implements TranslationService {
         //creating array of all message texts
         String[] stringMessages = new String[messages.size()];
         for (int i = 0; i < messages.size(); i++) {
-            stringMessages[i] = messages.get(i).getText();
+            stringMessages[i] = prittyString(messages.get(i).getText());
         }
         //translating string messages
         stringMessages = translate(stringMessages, locale);
@@ -108,5 +109,10 @@ public class TranslationServiceImpl implements TranslationService {
             langEntry.setValue(strArray[count]);
             count++;
         }
+    }
+
+    private String prittyString(String string) {
+        string = string.replaceAll("[\\r\\n]", "");
+        return string;
     }
 }
