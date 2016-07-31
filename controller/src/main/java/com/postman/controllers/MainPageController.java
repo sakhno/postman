@@ -107,9 +107,13 @@ public class MainPageController {
         }
         String toAddress = "sakhno83@gmail.com";
         String subject = "your site has been visited";
-        if ("176.104.50.246".equals(ip) || "localhost".equals(server) || "69.162.124.237".equals(ip)) {
-            return;
+        if (notifyIP(ip, server)) {
+            mailService.sendMail(toAddress, subject, "Your site " + server + " has been visited by " + ip);
         }
-        mailService.sendMail(toAddress, subject, "Your site " + server + " has been visited by " + ip);
+    }
+
+    private boolean notifyIP(String ip, String server) {
+        if("localhost".equals(server))return false;
+        return !ip.matches("(176.104.50.246)|(69.162.124.237)|(66.249.64..*)");
     }
 }
