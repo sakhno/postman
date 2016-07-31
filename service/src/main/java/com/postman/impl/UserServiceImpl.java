@@ -42,9 +42,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser(User user) throws PersistenceException {
         if (user.getId() != 0) {
+            user.setLogin(user.getLogin().toLowerCase());
             userDAO.update(user);
         } else {
             user.setPassword(shaPasswordEncoder.encodePassword(user.getPassword(), null));
+            user.setLogin(user.getLogin().toLowerCase());
             user = userDAO.create(user);
         }
         return user;
@@ -67,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByLogin(String login) throws PersistenceException {
-        return userDAO.getUserByLogin(login);
+        return userDAO.getUserByLogin(login.toLowerCase());
     }
 
     @Override
