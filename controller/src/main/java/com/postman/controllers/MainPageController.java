@@ -114,6 +114,7 @@ public class MainPageController {
 
     private boolean notifyIP(String ip, String server) {
         if("localhost".equals(server))return false;
+        
         return !ip.matches("(176.104.50.246)|(69.162.124.237)|(66.249.64..*)");
     }
 }
