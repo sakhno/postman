@@ -3,3 +3,5 @@
 /service/src/main/resources/mailservice_config.properties
 /hibernate/src/main/resources/postgresql_config.properties
 /mongodbDAO/src/main/resources/mongodb_config.properties
+*/*.iml
+*.idea
