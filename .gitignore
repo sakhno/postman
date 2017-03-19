@@ -5,15 +5,7 @@
 /mongodbDAO/src/main/resources/mongodb_config.properties
 */*.iml
 *.idea
-controller/target/
-dao/target/
-hibernate/target/
-model/target/
+*target/
 mongodbDAO/src/main/resources/
-mongodbDAO/target/
-security/target/
-service/target/
-tm-model/target/
 /aftership/src/main/resources/aftership.properties
-aftership/src/test/
-aftership/target/
+*.DS_Store
