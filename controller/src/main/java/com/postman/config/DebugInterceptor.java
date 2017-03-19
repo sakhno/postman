@@ -16,15 +16,15 @@ public class DebugInterceptor extends HandlerInterceptorAdapter {
 
     private static final Logger LOGGER = LogManager.getLogger(DebugInterceptor.class);
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String params = request.getQueryString();
-        if (params == null) {
-            params = "";
-        } else {
-            params = "?" + params;
-        }
-        LOGGER.debug(request.getRequestURL().toString() + params);
-        return super.preHandle(request, response, handler);
-    }
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        String params = request.getQueryString();
+//        if (params == null) {
+//            params = "";
+//        } else {
+//            params = "?" + params;
+//        }
+//        LOGGER.debug(request.getRequestURL().toString() + params);
+//        return super.preHandle(request, response, handler);
+//    }
 }

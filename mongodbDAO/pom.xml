@@ -32,5 +32,11 @@
             <artifactId>spring-data-mongodb</artifactId>
             <version>${springdata.mongodb.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.fakemongo</groupId>
+            <artifactId>fongo</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

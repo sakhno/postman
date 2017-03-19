@@ -5,6 +5,7 @@ import com.postman.TrackService;
 import com.postman.UserService;
 import com.postman.model.Track;
 import com.postman.model.User;
+import com.postman.model.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class TrackController {
                 trackService.saveTrack(track);
                 return "success";
             }
-        } catch (PersistenceException e) {
+        } catch (ServiceException e) {
             LOGGER.error(e);
             return "dberror";
         }

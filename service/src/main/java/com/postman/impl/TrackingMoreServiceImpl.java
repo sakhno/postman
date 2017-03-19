@@ -4,6 +4,7 @@ import com.postman.*;
 import com.postman.model.Message;
 import com.postman.model.PostService;
 import com.postman.model.Track;
+import com.postman.model.exception.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +12,15 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.*;
 
 /**
  * @author Anton Sakhno <sakhno83@gmail.com>
  */
-@Service
+//@Service
 public class TrackingMoreServiceImpl implements TrackingService {
     private static final Logger LOGGER = LogManager.getLogger(TrackingMoreServiceImpl.class);
     private static final String SERVICE_URL = "http://api.trackingmore.com/v2";
@@ -28,7 +29,7 @@ public class TrackingMoreServiceImpl implements TrackingService {
     private RestTemplate restTemplate;
 
     @Override
-    public Track getSingleTrack(String trackingNumber, PostService postService) throws TrackNotFoundException {
+    public Track getSingleTrack(String trackingNumber, PostService postService) throws ServiceException {
         HttpEntity<String> entity = new HttpEntity<>(getHeaders());
         TMSingleTrack tmobject = restTemplate.exchange(SERVICE_URL + "/trackings/" + postService.getCode() + "/" + trackingNumber, HttpMethod.GET, entity, TMSingleTrack.class).getBody();
         if (tmobject.getMeta().getCode() == 4031) {
@@ -41,12 +42,12 @@ public class TrackingMoreServiceImpl implements TrackingService {
     }
 
     @Override
-    public PostService getPostService(String trackCode) throws TrackNotFoundException {
+    public PostService getPostService(String trackCode) throws ServiceException {
         String jsonRequest = "{\"tracking_number\":\"" + trackCode + "\"}";
         HttpEntity<String> entity = new HttpEntity<>(jsonRequest, getHeaders());
         TMSinglePostService response = restTemplate.postForObject(SERVICE_URL + "/carriers/detect", entity, TMSinglePostService.class);
         if (response.getMeta().getCode() != 200) {
-            throw new TrackNotFoundException();
+            throw new ServiceException();
         }
         TMCarrier carrier = response.getCarriers()[0];
         PostService postService = new PostService();
@@ -57,27 +58,28 @@ public class TrackingMoreServiceImpl implements TrackingService {
     }
 
     @Override
-    public boolean addSingleTrack(String trackCode, PostService postService) throws TrackNotFoundException {
+    public Track addSingleTrack(String trackCode, PostService postService) throws ServiceException {
         HttpEntity<String> entity = new HttpEntity<>(getAddTrackBody(trackCode, postService), getHeaders());
         TMCommonRequest result = restTemplate.exchange(SERVICE_URL + "/trackings/post", HttpMethod.POST, entity, TMCommonRequest.class).getBody();
         int responseCode = result.getMeta().getCode();
         if (responseCode == 200 || responseCode == 4016) {
             LOGGER.debug("Track " + trackCode + " added to API.");
-            return true;
+            return getSingleTrack(trackCode, postService);
         } else {
             LOGGER.debug("Failed adding track " + trackCode + " to API.");
-            return false;
+            throw new ServiceException();
         }
     }
 
     @Override
-    public boolean addSingleTrack(String trackCode) throws TrackNotFoundException {
+    public Track addSingleTrack(String trackCode) throws ServiceException {
         PostService postService = getPostService(trackCode);
-        return addSingleTrack(trackCode, postService);
+        addSingleTrack(trackCode, postService);
+        return getSingleTrack(trackCode, postService);
     }
 
     @Override
-    public Track getSingleTrack(String trackCode) throws TrackNotFoundException {
+    public Track getSingleTrackById(String trackCode) throws ServiceException {
         PostService postService = getPostService(trackCode);
         return getSingleTrack(trackCode, postService);
     }
@@ -91,6 +93,11 @@ public class TrackingMoreServiceImpl implements TrackingService {
             result.put(tmTrack.getTrackingNumber(), convertToTrack(tmTrack));
         }
         return result;
+    }
+
+    @Override
+    public void deleteTrack(String id) throws ServiceException {
+        throw new NotImplementedException();
     }
 
     private HttpHeaders getHeaders() {

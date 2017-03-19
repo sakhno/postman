@@ -1,5 +1,6 @@
 package com.postman;
 
+import com.postman.model.exception.ServiceException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ScheduledTaskService {
             trackService.updateAllActiveTracks();
             long time = new Date().getTime() - startTime.getTime();
             LOGGER.info("Scheduled update finished in " + time + "ms");
-        } catch (PersistenceException e) {
+        } catch (ServiceException e) {
             LOGGER.error(e);
         }
     }

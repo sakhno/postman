@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Address;
@@ -17,6 +18,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -30,11 +32,11 @@ public class MailServiceImpl implements MailService {
     private static final String DEFAULT_FROM_ADDRESS = "service.postman@gmail.com";
 
     @Autowired
-    private Session session;
-    @Autowired
     private MessageSource messageSource;
     @Autowired
     private TranslationService translationService;
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Override
     public boolean sendMail(String toAddress, String subject, String message) {
@@ -43,13 +45,13 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public boolean sendMail(String toAddress, String subject, String message, String fromAddress) {
-        javax.mail.Message mailMessage = new MimeMessage(session);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
-            mailMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(toAddress));
-            mailMessage.setFrom(new InternetAddress(fromAddress));
-            mailMessage.setSubject(subject);
-            mailMessage.setText(message);
-            Transport.send(mailMessage);
+            mimeMessage.setRecipients(javax.mail.Message.RecipientType.TO, toAddress);
+            mimeMessage.setFrom(fromAddress);
+            mimeMessage.setSubject(subject);
+            mimeMessage.setText(message);
+            mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             LOGGER.error(e);
             return false;
@@ -60,17 +62,14 @@ public class MailServiceImpl implements MailService {
     @Override
     public boolean notifyStatuses(Map<User, List<Message>> userMap) {
         try {
-            Transport transport = session.getTransport();
-            transport.connect();
-            int count = 0;
+            List<MimeMessage> emailsToSend = new ArrayList<>();
             for (Map.Entry<User, List<Message>> entry : userMap.entrySet()) {
                 User user = entry.getKey();
                 List<Message> messages = entry.getValue();
-                transport.sendMessage(makeNotifyLetter(user, messages), new Address[]{new InternetAddress(user.getLogin())});
-                count++;
+                emailsToSend.add(makeNotifyLetter(user, messages));
             }
-            LOGGER.debug(count + " notify letters sended");
-            transport.close();
+            mailSender.send(emailsToSend.toArray(new MimeMessage[emailsToSend.size()]));
+            LOGGER.debug(emailsToSend.size() + " notify letters sended");
         } catch (MessagingException e) {
             LOGGER.error(e);
             return false;
@@ -78,12 +77,13 @@ public class MailServiceImpl implements MailService {
         return true;
     }
 
-    private javax.mail.Message makeNotifyLetter(User user, List<Message> messages) throws MessagingException {
-        MimeMessage mailMessage = new MimeMessage(session);
+    private MimeMessage makeNotifyLetter(User user, List<Message> messages) throws MessagingException {
+        MimeMessage mailMessage = mailSender.createMimeMessage();
         Locale locale = new Locale(user.getLanguage().name());
         mailMessage.setRecipients(javax.mail.Message.RecipientType.TO, InternetAddress.parse(user.getLogin()));
         mailMessage.setFrom(new InternetAddress(DEFAULT_FROM_ADDRESS));
-        mailMessage.setSubject(messageSource.getMessage("mail.notification.subject", null, locale));
+        mailMessage.setSubject(messageSource.getMessage("mail.notification.subject", null,
+                "mail.notification.subject", locale));
         StringBuilder sb = new StringBuilder();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         for (Message message : messages) {

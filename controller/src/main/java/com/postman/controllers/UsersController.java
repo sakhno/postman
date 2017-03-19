@@ -76,14 +76,15 @@ public class UsersController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String userRegistration(@ModelAttribute("userForm") @Validated User user, BindingResult bindingResult, Model model) {
+    public String userRegistration(@ModelAttribute("userForm") @Validated User user, BindingResult bindingResult, Model model,
+                                   @RequestHeader String host) {
         model.addAttribute("languages", Language.values());
         if (bindingResult.hasErrors()) {
             return "userform";
         } else {
             try {
                 user = userService.saveUser(user);
-                userService.verifyEmail(user);
+                userService.verifyEmail(user, host);
             } catch (PersistenceException e) {
                 LOGGER.error(e);
                 bindingResult.rejectValue("login", "dberror");
@@ -133,11 +134,12 @@ public class UsersController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/confirmemail")
     @ResponseBody
-    public boolean confirmemail(@RequestParam Map<String, String> parameters) {
+    public boolean confirmemail(@RequestParam Map<String, String> parameters,
+                                @RequestHeader String host) {
         long id = Long.parseLong(parameters.get("userid"));
         try {
             User user = userService.findUserById(id);
-            userService.verifyEmail(user);
+            userService.verifyEmail(user, host);
             return true;
         } catch (PersistenceException e) {
             LOGGER.error(e);

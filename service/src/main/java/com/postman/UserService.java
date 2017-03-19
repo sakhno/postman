@@ -19,7 +19,7 @@ public interface UserService extends UserDetailsService {
 
     User getUserByLogin(String login) throws PersistenceException;
 
-    void verifyEmail(User user) throws PersistenceException;
+    void verifyEmail(User user, String host) throws PersistenceException;
 
     User verifyToken(String token) throws PersistenceException, TokenExpiredException;
 }

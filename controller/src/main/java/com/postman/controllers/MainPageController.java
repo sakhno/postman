@@ -3,6 +3,7 @@ package com.postman.controllers;
 import com.postman.*;
 import com.postman.model.Track;
 import com.postman.model.User;
+import com.postman.model.exception.ServiceException;
 import com.postman.validation.SearchForm;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,7 +62,7 @@ public class MainPageController {
             } catch (PersistenceException e) {
                 LOGGER.error(e);
                 return "home";
-            } catch (TrackNotFoundException e) {
+            } catch (ServiceException e) {
                 return "redirect:/home?trackerror";
             }
         }
@@ -79,7 +80,7 @@ public class MainPageController {
             try {
                 user = userService.getUserByLogin(principal.getName());
                 user.setTracks(trackService.getAllUserTracks(user));
-            } catch (PersistenceException e) {
+            } catch (ServiceException e) {
                 LOGGER.error(e);
             }
             return user;

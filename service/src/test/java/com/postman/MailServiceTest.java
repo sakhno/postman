@@ -9,12 +9,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import java.util.*;
 
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Anton Sakhno <antonsakhno.work@gmail.com>
@@ -38,10 +42,13 @@ public class MailServiceTest {
 
     @Autowired
     private MailService mailService;
+    @Autowired
+    private JavaMailSender javaMailSenderMock;
 
     @Before
     public void setUp() {
         userMessages = generateUserMessages();
+        when(javaMailSenderMock.createMimeMessage()).thenReturn(new MimeMessage(Session.getDefaultInstance(new Properties())));
     }
 
     @Test

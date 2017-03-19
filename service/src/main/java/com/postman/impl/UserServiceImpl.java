@@ -25,7 +25,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
     private static final String BASE_URL_LOCALHOST = "http://localhost:8080/users/confirmation";
-    private static final String BASE_URL_HEROKU = "http://postmancom.herokuapp.com/users/confirmation";
+    private static final String EMAIL_CONFIRM_PATH = "/users/confirmation";
     @Autowired
 //    @Qualifier("hibernateUserDAO")
     @Qualifier("mongoUserDAO")
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void verifyEmail(User user) throws PersistenceException {
+    public void verifyEmail(User user, String host) throws PersistenceException {
         ResourceBundle messages = ResourceBundle.getBundle("messages", new Locale(user.getLanguage().name()));
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
         String textfooter = messages.getString("mail.registration.textfooter");
         StringBuilder text = new StringBuilder();
         text.append(textheader).append("\n\n\n")
-                .append(BASE_URL_HEROKU).append("?token=").append(token)
+                .append(host).append(EMAIL_CONFIRM_PATH).append("?token=").append(token)
                 .append("\n\n\n\n\n\n").append(textfooter);
         mailService.sendMail(user.getLogin(), subject, text.toString());
     }
