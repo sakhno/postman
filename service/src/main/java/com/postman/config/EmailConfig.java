@@ -61,6 +61,7 @@ public class EmailConfig {
 //    }
 
     @Bean
+    @Profile("default")
     public JavaMailSender mailSender() {
         Properties props = new Properties();
         try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream(MAIL_CONFIG)) {
