@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="DEBUG" name="controller-configuration">
+<Configuration status="ERROR" name="controller-configuration">
     <Properties>
         <Property name="LOG_DIR">logs</Property>
         <Property name="ARCHIVE">${LOG_DIR}/archive</Property>
@@ -30,7 +30,7 @@
         </SMTP>
     </Appenders>
     <Loggers>
-        <Root level="DEBUG">
+        <Root level="ERROR">
             <!--<AppenderRef ref="Mail"/>-->
             <!--<AppenderRef ref="fileWriter"/>-->
             <AppenderRef ref="console"/>
